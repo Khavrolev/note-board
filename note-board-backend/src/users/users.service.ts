@@ -23,14 +23,13 @@ export class UsersService {
   ) {}
 
   getAll() {
-    return this.usersModel.find().populate('note').exec();
+    return this.usersModel.find().populate('notes').exec();
   }
 
-  async getOneByName(name: string, check: CheckUser) {
-    const user = await this.usersModel
-      .findOne({ name })
-      .populate('note')
-      .exec();
+  async getOneByName(name: string, check: CheckUser, isPopulate: boolean) {
+    const user = isPopulate
+      ? await this.usersModel.findOne({ name }).populate('notes').exec()
+      : await this.usersModel.findOne({ name }).exec();
 
     if (check === CheckUser.MustBe) {
       this.checkUser(user, name);
@@ -53,7 +52,7 @@ export class UsersService {
   async updateUser(dto: UpdateUserDto) {
     const user = await this.usersModel
       .findOne({ name: dto.newName })
-      .populate('note')
+      .populate('notes')
       .exec();
 
     this.checkNoUser(user);
@@ -70,11 +69,11 @@ export class UsersService {
   }
 
   async deleteUser(name: string) {
-    const user = await this.getOneByName(name, CheckUser.MustBe);
+    const user = await this.getOneByName(name, CheckUser.MustBe, false);
 
-    if (user?.note) {
+    if (user?.notes.length !== 0) {
       throw new BadRequestException(
-        `There's Note of this user = '${user.name}'`,
+        `There's Notes of this user = '${user.name}'`,
       );
     }
 

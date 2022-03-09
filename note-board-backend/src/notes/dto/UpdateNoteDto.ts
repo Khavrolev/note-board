@@ -1,9 +1,8 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-
 export class UpdateNoteDto {
   @IsString()
   @IsNotEmpty()
-  readonly userName: string;
+  readonly id: string;
 
   @IsString()
   @IsNotEmpty()

@@ -7,6 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { ValidateMongoId } from '../validation/ValidateMongoId';
 import { CreateNoteDto } from './dto/CreateNoteDto';
 import { UpdateNoteDto } from './dto/UpdateNoteDto';
 import { NotesService } from './notes.service';
@@ -20,9 +21,14 @@ export class NotesController {
     return this.notesService.getAll();
   }
 
-  @Get(':name')
-  getOneByUserName(@Param('name') name: string) {
-    return this.notesService.getOneByUserName(name);
+  @Get('user/:name')
+  getByUserName(@Param('name') name: string) {
+    return this.notesService.getByUserName(name);
+  }
+
+  @Get(':id')
+  getById(@Param('id', ValidateMongoId) id: string) {
+    return this.notesService.getById(id);
   }
 
   @Post()
@@ -35,8 +41,8 @@ export class NotesController {
     return this.notesService.updateNote(dto);
   }
 
-  @Delete(':name')
-  deleteNote(@Param('name') name: string) {
-    return this.notesService.deleteNote(name);
+  @Delete(':id')
+  deleteNote(@Param('id', ValidateMongoId) id: string) {
+    return this.notesService.deleteNote(id);
   }
 }

@@ -1,10 +1,6 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CheckUser, UsersService } from '../users/users.service';
 import { CreateNoteDto } from './dto/CreateNoteDto';
 import { UpdateNoteDto } from './dto/UpdateNoteDto';
@@ -22,15 +18,28 @@ export class NotesService {
     return this.notesModel.find().populate('user').exec();
   }
 
-  async getOneByUserName(name: string) {
-    const user = await this.usersService.getOneByName(name, CheckUser.MustBe);
+  async getByUserName(name: string) {
+    const user = await this.usersService.getOneByName(
+      name,
+      CheckUser.MustBe,
+      false,
+    );
 
-    const note = await this.notesModel
-      .findOne({ user: user._id })
+    const notes = await this.notesModel
+      .find({ user: user._id })
       .populate('user')
       .exec();
 
-    this.checkNote(note, name);
+    return notes;
+  }
+
+  async getById(_id: string) {
+    const note = await this.notesModel
+      .findOne({ _id: new Types.ObjectId(_id) })
+      .populate('user')
+      .exec();
+
+    this.checkNote(note, _id);
 
     return note;
   }
@@ -39,63 +48,57 @@ export class NotesService {
     const user = await this.usersService.getOneByName(
       dto.userName,
       CheckUser.MustBe,
+      false,
     );
-
-    this.checkNoNote(user?.note, user.name);
 
     const newNote = new this.notesModel({ ...dto, user });
 
-    user.note = newNote._id;
+    user.notes.push(newNote._id);
     await user.save();
 
     return newNote.save();
   }
 
   async updateNote(dto: UpdateNoteDto) {
-    const user = await this.usersService.getOneByName(
-      dto.userName,
-      CheckUser.MustBe,
-    );
-
     const updatedNote = await this.notesModel
       .findOneAndUpdate(
-        { user: user._id },
+        { _id: dto.id },
         { text: dto.text, top: dto.top, left: dto.left },
         { returnOriginal: false },
       )
       .populate('user');
 
-    this.checkNote(updatedNote, dto.userName);
+    this.checkNote(updatedNote, dto.id);
 
     return updatedNote;
   }
 
-  async deleteNote(name: string) {
-    const user = await this.usersService.getOneByName(name, CheckUser.MustBe);
-
+  async deleteNote(_id: string) {
     const note = await this.notesModel
-      .findOneAndRemove({ user: user._id })
+      .findOneAndRemove({ _id })
       .populate('user');
 
-    this.checkNote(note, name);
+    this.checkNote(note, _id);
 
-    user.note = undefined;
+    const user = await this.usersService.getOneByName(
+      note.user.name,
+      CheckUser.MustBe,
+      false,
+    );
+
+    const index = user.notes.indexOf(note._id);
+    if (index > -1) {
+      user.notes.splice(index, 1);
+    }
+
     await user.save();
 
     return note;
   }
 
-  private checkNote(note: Note, name: string) {
+  private checkNote(note: Note, id: string) {
     if (!note) {
-      throw new NotFoundException(`No Note with author's username = '${name}'`);
-    }
-  }
-
-  private checkNoNote(note: Note, name: string) {
-    if (note) {
-      throw new BadRequestException(
-        `There's Note with author's username = '${name}'`,
-      );
+      throw new NotFoundException(`No Note with id = '${id}'`);
     }
   }
 }

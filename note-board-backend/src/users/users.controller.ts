@@ -22,7 +22,7 @@ export class UsersController {
 
   @Get(':name')
   getOneByName(@Param('name') name: string) {
-    return this.usersService.getOneByName(name, CheckUser.MustBe);
+    return this.usersService.getOneByName(name, CheckUser.MustBe, true);
   }
 
   @Post()

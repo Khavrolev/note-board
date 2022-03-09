@@ -9,8 +9,8 @@ export class User {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Note' }) //почему не попадает?
-  note: Note;
+  @Prop({ type: [Types.ObjectId], ref: 'Note', default: [] }) //почему не попадает?
+  notes: Note[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

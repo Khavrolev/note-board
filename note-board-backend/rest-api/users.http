@@ -21,9 +21,9 @@ Content-Type: application/json
 
 {
     "name": "FirstUser",
-    "newName": "StillFirstUser1"
+    "newName": "StillFirstUser"
 }
 
 ### Delete one user. Input info is param @getname
-@deletename = FirstUser
+@deletename = StillFirstUser
 delete {{hostname}}/users/{{deletename}}

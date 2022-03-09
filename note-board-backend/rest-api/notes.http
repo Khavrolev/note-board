@@ -3,9 +3,13 @@
 ###Get all notes
 get {{hostname}}/notes
 
-### Get one note by username. Input info is param @getname
-@getname = StillFirstUser
-get {{hostname}}/notes/{{getname}}
+### Get notes by username. Input info is param @getname
+@getname = FirstUser
+get {{hostname}}/notes/user/{{getname}}
+
+### Get one note by id. Input info is param @getid
+@getid = 6228864f7d004f6333cd3607
+get {{hostname}}/notes/{{getid}}
 
 ### Create one note. Input info is json with string 'text', string 'userName', numbers 'top' and 'left'
 post {{hostname}}/notes
@@ -23,12 +27,12 @@ put {{hostname}}/notes
 Content-Type: application/json
 
 {
-    "text": "Second text",
-    "userName": "FirstUser",
+    "id": "622884bfef1ee7f727b0838b",
+    "text": "Third text",
     "top": 200,
     "left": 100
 }
 
-### Delete one note. Input info is param @getname
-@deletename = FirstUser
-delete {{hostname}}/notes/{{deletename}}
+### Delete one note. Input info is param @deleteid
+@deleteid = 622884d3ef1ee7f727b0838f
+delete {{hostname}}/notes/{{deleteid}}
