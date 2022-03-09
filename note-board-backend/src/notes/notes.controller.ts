@@ -7,8 +7,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ValidateMongoId } from '../validation/ValidateMongoId';
 import { CreateNoteDto } from './dto/CreateNoteDto';
+import { NoteIdDto } from './dto/NoteIdDto';
 import { UpdateNoteDto } from './dto/UpdateNoteDto';
 import { NotesService } from './notes.service';
 
@@ -27,8 +27,8 @@ export class NotesController {
   }
 
   @Get(':id')
-  getById(@Param('id', ValidateMongoId) id: string) {
-    return this.notesService.getById(id);
+  getById(@Param() dto: NoteIdDto) {
+    return this.notesService.getById(dto.id);
   }
 
   @Post()
@@ -42,7 +42,7 @@ export class NotesController {
   }
 
   @Delete(':id')
-  deleteNote(@Param('id', ValidateMongoId) id: string) {
-    return this.notesService.deleteNote(id);
+  deleteNote(@Param() dto: NoteIdDto) {
+    return this.notesService.deleteNote(dto.id);
   }
 }

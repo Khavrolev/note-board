@@ -8,7 +8,7 @@ get {{hostname}}/notes
 get {{hostname}}/notes/user/{{getname}}
 
 ### Get one note by id. Input info is param @getid
-@getid = 6228864f7d004f6333cd3607
+@getid = 62289b5845ad7dd7f5a98cdb
 get {{hostname}}/notes/{{getid}}
 
 ### Create one note. Input info is json with string 'text', string 'userName', numbers 'top' and 'left'
@@ -34,5 +34,5 @@ Content-Type: application/json
 }
 
 ### Delete one note. Input info is param @deleteid
-@deleteid = 622884d3ef1ee7f727b0838f
+@deleteid = 62289b5e45ad7dd7f5a98cdf
 delete {{hostname}}/notes/{{deleteid}}

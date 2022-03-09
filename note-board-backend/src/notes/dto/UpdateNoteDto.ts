@@ -1,7 +1,6 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 export class UpdateNoteDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsMongoId()
   readonly id: string;
 
   @IsString()
