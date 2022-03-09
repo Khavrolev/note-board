@@ -1,0 +1,34 @@
+@hostname = http://localhost:8000
+
+###Get all notes
+get {{hostname}}/notes
+
+### Get one note by username. Input info is param @getname
+@getname = StillFirstUser
+get {{hostname}}/notes/{{getname}}
+
+### Create one note. Input info is json with string 'text', string 'userName', numbers 'top' and 'left'
+post {{hostname}}/notes
+Content-Type: application/json
+
+{
+    "text": "First text",
+    "userName": "FirstUser",
+    "top": 100,
+    "left": 200
+}
+
+### Update one note. Update info is json with string 'username', string 'text', numbers 'top' and 'left'
+put {{hostname}}/notes
+Content-Type: application/json
+
+{
+    "text": "Second text",
+    "userName": "FirstUser",
+    "top": 200,
+    "left": 100
+}
+
+### Delete one note. Input info is param @getname
+@deletename = FirstUser
+delete {{hostname}}/notes/{{deletename}}
