@@ -1,1 +1,3 @@
 .DS_Store
+note-board-backend/static/index.html
+note-board-backend/src/app.gateway_example.ts

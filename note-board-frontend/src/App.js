@@ -1,23 +1,11 @@
-import logo from "./logo.svg";
-import "./App.css";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
+  const [userName, setUserName] = useLocalStorage("username");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>Hello, {userName}! We're happy to see you!</div>
     </div>
   );
 }
