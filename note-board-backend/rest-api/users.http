@@ -12,7 +12,7 @@ post {{hostname}}/users
 Content-Type: application/json
 
 {
-    "name": "FirstUser"
+    "name": "ThirdUser"
 }
 
 ### Update one user. Update info is json with string 'name' and string 'newName'

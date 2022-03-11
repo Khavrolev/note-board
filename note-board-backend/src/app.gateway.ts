@@ -12,7 +12,13 @@ import { Server } from 'http';
 import { NotesService } from './notes/notes.service';
 import { UsersService } from './users/users.service';
 
-@WebSocketGateway(Number(process.env.GW_PORT), { namespace: 'board' })
+// @WebSocketGateway(Number(process.env.GW_PORT), { непонятно, как законектитться по другому порту и с другим неймспейсом
+//   namespace: process.env.GW_NAMESPACE,
+//   cors: true,
+// })
+@WebSocketGateway({
+  cors: true,
+})
 export class AppGateway
   implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
 {

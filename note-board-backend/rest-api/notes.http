@@ -16,10 +16,10 @@ post {{hostname}}/notes
 Content-Type: application/json
 
 {
-    "text": "First text",
-    "userName": "FirstUser",
-    "top": 100,
-    "left": 200
+    "text": "Third text (2)",
+    "userName": "ThirdUser",
+    "top": 400,
+    "left": 400
 }
 
 ### Update one note. Update info is json with string 'username', string 'text', numbers 'top' and 'left'
