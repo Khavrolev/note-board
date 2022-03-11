@@ -8,7 +8,7 @@ export default function useLocalStorage(key) {
 
   useEffect(() => {
     const currentValue = localStorage.getItem(prefixedKey);
-    console.log(`currentValue = ${currentValue}, prefixedKey = ${prefixedKey}`);
+
     if (currentValue !== null) {
       setValue(currentValue);
       return;
