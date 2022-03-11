@@ -1,0 +1,5 @@
+.board {
+  flex: 1;
+  margin-top: 10px;
+  border: 1px #000000 dashed;
+}

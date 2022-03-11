@@ -1,0 +1,12 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  text-align: center;
+  padding: 10px;
+  border: 1px #000000 dashed;
+  font-size: 30px;
+}
