@@ -11,7 +11,7 @@ const Note = ({ note }) => {
     newColor.backgroundColor = getRandomColor();
     newColor.fontColor = idealTextColor(newColor.backgroundColor);
 
-    console.log(note);
+    console.log(newColor);
     setColor(newColor);
   }, []);
 
