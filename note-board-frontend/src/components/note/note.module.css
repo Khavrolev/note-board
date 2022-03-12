@@ -5,6 +5,16 @@
   width: 200px;
   height: 100px;
   border: 1px #000000 solid;
+  border-radius: 10px;
+}
+
+.note_selected {
+  border: 5px #ff0000 solid;
+  box-shadow: 10px 5px 5px red;
+}
+
+.note_selected:hover {
+  cursor: pointer;
 }
 
 .username {

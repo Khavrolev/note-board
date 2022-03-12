@@ -1,8 +1,9 @@
+import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import { getRandomColor, idealTextColor } from "../../utils/getColor";
 import cl from "./note.module.css";
 
-const Note = ({ note }) => {
+const Note = ({ note, user }) => {
   const [color, setColor] = useState(null);
 
   useEffect(() => {
@@ -23,7 +24,9 @@ const Note = ({ note }) => {
         backgroundColor: color?.backgroundColor,
         color: color?.fontColor,
       }}
-      className={cl.note}
+      className={classNames(cl.note, {
+        [cl.note_selected]: user.name === note.user.name,
+      })}
     >
       <div className={cl.username}>{note?.user.name}</div>
       <div className={cl.text}>{note?.text}</div>

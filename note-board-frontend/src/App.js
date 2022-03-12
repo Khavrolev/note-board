@@ -1,20 +1,20 @@
 import Board from "./components/board/board";
 import { socket, SocketContext } from "./contexts/SocketProvider";
-import useLocalStorage from "./hooks/useLocalStorage";
+import useGetUser from "./hooks/useGetUser";
 import "./App.css";
 
 function App() {
-  const [userName, setUserName] = useLocalStorage("username");
+  const [user, setUser] = useGetUser("username");
 
   return (
     <SocketContext.Provider value={socket}>
       <div className="container">
         <div className="title">
-          {userName
-            ? `Hello, ${userName}! We're happy to see you`
+          {user
+            ? `Hello, ${user.name}! We're happy to see you`
             : `Hello, friend! Please, sign in`}
         </div>
-        <Board />
+        <Board user={user} />
       </div>
     </SocketContext.Provider>
   );

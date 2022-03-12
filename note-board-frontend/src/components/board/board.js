@@ -3,7 +3,7 @@ import { SocketContext } from "../../contexts/SocketProvider";
 import Note from "../note/note";
 import cl from "./board.module.css";
 
-const Board = () => {
+const Board = ({ user }) => {
   const socket = useContext(SocketContext);
   const [notes, setNotes] = useState(null);
 
@@ -15,9 +15,10 @@ const Board = () => {
 
   return (
     <div className={cl.board}>
-      {notes?.map((note, index) => (
-        <Note key={index} note={note} />
-      ))}
+      {user &&
+        notes?.map((note, index) => (
+          <Note key={index} note={note} user={user} />
+        ))}
     </div>
   );
 };
