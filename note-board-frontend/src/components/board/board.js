@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../contexts/SocketProvider";
+import { createNewNote } from "../../utils/socket";
 import Note from "../note/note";
 import cl from "./board.module.css";
 
@@ -9,15 +10,24 @@ const Board = ({ user }) => {
 
   useEffect(() => {
     socket.on("all-notes-to-client", setNotes);
-
-    return () => socket.disconnect();
+    socket.on("create-note-to-client", (data) => {
+      setNotes((currentNotes) => [...currentNotes, data]);
+    });
+    socket.on("delete-note-to-client", (data) => {
+      setNotes((currentNotes) =>
+        currentNotes.filter((note) => note._id !== data._id)
+      );
+    });
   }, []);
 
   return (
-    <div className={cl.board}>
+    <div
+      onClick={(event) => createNewNote(socket, event, user)}
+      className={cl.board}
+    >
       {user &&
         notes?.map((note, index) => (
-          <Note key={index} note={note} user={user} />
+          <Note key={note._id} note={note} user={user} />
         ))}
     </div>
   );

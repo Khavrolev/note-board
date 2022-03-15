@@ -1,37 +1,75 @@
 import classNames from "classnames";
-import React, { useEffect, useState } from "react";
-import { getRandomColor, idealTextColor } from "../../utils/getColor";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { idealTextColor } from "../../utils/getColor";
+import Draggable from "react-draggable";
 import cl from "./note.module.css";
+import { SocketContext } from "../../contexts/SocketProvider";
+import { changePosition, changeText, deleteNote } from "../../utils/socket";
 
 const Note = ({ note, user }) => {
-  const [color, setColor] = useState(null);
+  const [textColor, setTextColor] = useState(null);
+  const [currentNote, setCurrentNote] = useState(note);
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
-    const newColor = {};
+    setTextColor(idealTextColor(currentNote?.color));
 
-    newColor.backgroundColor = getRandomColor();
-    newColor.fontColor = idealTextColor(newColor.backgroundColor);
-
-    console.log(note);
-    setColor(newColor);
+    socket.on("update-note-to-client", (data) => {
+      if (note._id === data._id) {
+        setCurrentNote(data);
+      }
+    });
   }, []);
 
+  const changeable = useMemo(
+    () => isChangeable(user.name, note.user.name),
+    [user.name, note.user.name]
+  );
+
   return (
-    <div
-      style={{
-        top: note.top,
-        left: note.left,
-        backgroundColor: color?.backgroundColor,
-        color: color?.fontColor,
-      }}
-      className={classNames(cl.note, {
-        [cl.note_selected]: user.name === note.user.name,
-      })}
+    <Draggable
+      onStart={() => changeable}
+      onStop={(event, data) => changePosition(socket, data, currentNote)}
+      handle={`.${cl.header}`}
+      cancel={`.${cl.note_delete}`}
     >
-      <div className={cl.username}>{note?.user.name}</div>
-      <div className={cl.text}>{note?.text}</div>
-    </div>
+      <div
+        style={{
+          top: currentNote?.top,
+          left: currentNote?.left,
+          backgroundColor: currentNote?.color,
+          color: textColor,
+        }}
+        className={classNames(cl.note, {
+          [cl.note_selected]: changeable,
+        })}
+      >
+        <div className={cl.header}>
+          <div className={cl.username}>{currentNote?.user.name}</div>
+          {changeable ? (
+            <button
+              className={cl.note_delete}
+              onClick={() => deleteNote(socket, currentNote._id)}
+            >
+              X
+            </button>
+          ) : null}
+        </div>
+        <div className={cl.text}>
+          <textarea
+            style={{
+              color: textColor,
+            }}
+            value={currentNote?.text}
+            readOnly={!changeable}
+            onChange={(event) => changeText(socket, event, currentNote)}
+          ></textarea>
+        </div>
+      </div>
+    </Draggable>
   );
 };
+
+const isChangeable = (userName, notesUserName) => userName === notesUserName;
 
 export default Note;
