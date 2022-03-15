@@ -51,9 +51,24 @@ export class AppGateway
     );
   }
 
-  @SubscribeMessage('new-note-to-server')
-  async handleMessage(@MessageBody() data) {
+  @SubscribeMessage('create-note-to-server')
+  async createNote(@MessageBody() data) {
+    this.logger.log(`Create note`);
     const note = await this.notesService.createNote(data);
-    this.wss.emit('new-note-to-client', { note });
+    this.wss.emit('create-note-to-client', note);
+  }
+
+  @SubscribeMessage('update-note-to-server')
+  async updateNote(@MessageBody() data) {
+    this.logger.log(`Update note`);
+    const note = await this.notesService.updateNote(data);
+    this.wss.emit('update-note-to-client', note);
+  }
+
+  @SubscribeMessage('delete-note-to-server')
+  async deleteNote(@MessageBody() data) {
+    this.logger.log(`Delete note`);
+    const note = await this.notesService.deleteNote(data);
+    this.wss.emit('delete-note-to-client', note);
   }
 }

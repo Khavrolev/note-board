@@ -6,8 +6,11 @@ export type NoteDocument = Note & Document;
 
 @Schema()
 export class Note {
-  @Prop({ required: true })
+  @Prop()
   text: string;
+
+  @Prop({ required: true })
+  color: string;
 
   @Prop({ required: true, min: 0 })
   top: number;

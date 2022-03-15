@@ -8,6 +8,10 @@ export class CreateNoteDto {
   @IsNotEmpty()
   readonly userName: string;
 
+  @IsString()
+  @IsNotEmpty()
+  readonly color: string;
+
   @IsNumber()
   readonly top: number;
 

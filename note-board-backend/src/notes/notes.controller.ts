@@ -28,7 +28,7 @@ export class NotesController {
 
   @Get(':id')
   getById(@Param() dto: NoteIdDto) {
-    return this.notesService.getById(dto.id);
+    return this.notesService.getById(dto._id);
   }
 
   @Post()
@@ -43,6 +43,6 @@ export class NotesController {
 
   @Delete(':id')
   deleteNote(@Param() dto: NoteIdDto) {
-    return this.notesService.deleteNote(dto.id);
+    return this.notesService.deleteNote(dto._id);
   }
 }

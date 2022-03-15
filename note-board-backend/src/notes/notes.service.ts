@@ -62,13 +62,13 @@ export class NotesService {
   async updateNote(dto: UpdateNoteDto) {
     const updatedNote = await this.notesModel
       .findOneAndUpdate(
-        { _id: dto.id },
+        { _id: dto._id },
         { text: dto.text, top: dto.top, left: dto.left },
         { returnOriginal: false },
       )
       .populate('user');
 
-    this.checkNote(updatedNote, dto.id);
+    this.checkNote(updatedNote, dto._id);
 
     return updatedNote;
   }

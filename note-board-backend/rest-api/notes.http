@@ -18,6 +18,7 @@ Content-Type: application/json
 {
     "text": "Third text (2)",
     "userName": "ThirdUser",
+    "color": "#000000",
     "top": 400,
     "left": 400
 }
