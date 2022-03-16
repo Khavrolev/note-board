@@ -9,7 +9,7 @@ npm run start
 ```
 
 ##Info
-Create note - double click on board;
+Create note - dubble click on board;
 Move note - drag and drop username;
 Edit note - change textarea;
 Delete note - click "X"-button;
