@@ -1,4 +1,4 @@
-# Note board client-server application (Frontkend)
+# Note board client-server application (Frontend)
 
 ## How to run
 
