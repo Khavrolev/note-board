@@ -12,19 +12,20 @@ export const deleteNote = (socket, id) => {
   socket.emit("delete-note-to-server", id);
 };
 
-export const changePosition = (socket, data, currentNote) => {
-  updateNote(socket, {
+export const changePosition = (socket, data, currentNote, setCurrentNote) => {
+  const newNote = {
     ...currentNote,
-    top: currentNote.top + data.y,
-    left: currentNote.left + data.x,
-  });
+    top: data.y,
+    left: data.x,
+  };
+  updateNote(socket, newNote);
+  setCurrentNote(newNote);
 };
 
-export const changeText = (socket, event, currentNote) => {
-  updateNote(socket, {
-    ...currentNote,
-    text: event.target.value,
-  });
+export const changeText = (socket, event, currentNote, setCurrentNote) => {
+  const newNote = { ...currentNote, text: event.target.value };
+  updateNote(socket, newNote);
+  setCurrentNote(newNote);
 };
 
 export const createNewNote = (socket, event, user) => {
@@ -36,7 +37,7 @@ export const createNewNote = (socket, event, user) => {
     text: "",
     userName: user.name,
     color: getRandomColor(),
-    top: event.clientY,
+    top: event.clientY - event.target.offsetTop,
     left: event.clientX - event.target.offsetLeft,
   });
 };

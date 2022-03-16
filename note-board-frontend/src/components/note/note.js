@@ -29,14 +29,15 @@ const Note = ({ note, user }) => {
   return (
     <Draggable
       onStart={() => changeable}
-      onStop={(event, data) => changePosition(socket, data, currentNote)}
+      onStop={(event, data) =>
+        changePosition(socket, data, currentNote, setCurrentNote)
+      }
+      position={{ x: currentNote.left, y: currentNote.top }}
       handle={`.${cl.header}`}
       cancel={`.${cl.note_delete}`}
     >
       <div
         style={{
-          top: currentNote?.top,
-          left: currentNote?.left,
           backgroundColor: currentNote?.color,
           color: textColor,
         }}
@@ -62,7 +63,9 @@ const Note = ({ note, user }) => {
             }}
             value={currentNote?.text}
             readOnly={!changeable}
-            onChange={(event) => changeText(socket, event, currentNote)}
+            onChange={(event) =>
+              changeText(socket, event, currentNote, setCurrentNote)
+            }
           ></textarea>
         </div>
       </div>
