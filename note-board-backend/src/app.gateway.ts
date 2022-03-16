@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -9,6 +10,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'http';
+import { Socket } from 'socket.io';
 import { NotesService } from './notes/notes.service';
 import { UsersService } from './users/users.service';
 
@@ -59,10 +61,10 @@ export class AppGateway
   }
 
   @SubscribeMessage('update-note-to-server')
-  async updateNote(@MessageBody() data) {
+  async updateNote(@MessageBody() data, @ConnectedSocket() client: Socket) {
     this.logger.log(`Update note`);
     const note = await this.notesService.updateNote(data);
-    this.wss.emit('update-note-to-client', note);
+    client.broadcast.emit('update-note-to-client', note);
   }
 
   @SubscribeMessage('delete-note-to-server')
