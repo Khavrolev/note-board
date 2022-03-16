@@ -1,6 +1,6 @@
-#Note board client-server application
+# Note board client-server application
 
-##Task
+## Task
 
 User experience:
 User opens client by url and sees input prompt (modal popup) where he should input his name
@@ -28,5 +28,6 @@ Any framework is welcome
 Rest api for user registration (username input)
 Websocket for clients synchronization
 
-##Info
+## Info
+
 There are two projects (backend and frontend). Backend project is Node.js server based on NestJS framework (note-board-backend). Frontend project is React-client project (note-board-frontend). Follow to Readme files in this projects.
