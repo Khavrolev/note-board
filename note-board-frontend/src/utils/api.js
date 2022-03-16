@@ -11,7 +11,7 @@ export const fetchGetData = async (userName) => {
   }
 };
 
-export const fetchPostData = async (userName, setUser) => {
+export const fetchPostData = async (userName) => {
   try {
     const response = await axios.post(`${host}/users/`, { name: userName });
     return response.data;

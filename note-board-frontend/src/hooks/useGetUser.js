@@ -28,7 +28,7 @@ export default function useGetUser(key) {
       }
 
       try {
-        const data = await fetchPostData(newValue, setUser);
+        const data = await fetchPostData(newValue);
         setUser(data);
         localStorage.setItem(prefixedKey, newValue);
       } catch (error) {
