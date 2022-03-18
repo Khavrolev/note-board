@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { CheckUser, UsersService } from '../users/users.service';
+import { UsersService } from '../users/users.service';
 import { CreateNoteDto } from './dto/CreateNoteDto';
 import { UpdateNoteDto } from './dto/UpdateNoteDto';
 import { Note, NoteDocument } from './schemas/notes.schema';
@@ -18,38 +18,8 @@ export class NotesService {
     return this.notesModel.find().populate('user').exec();
   }
 
-  async getByUserName(name: string) {
-    const user = await this.usersService.getOneByName(
-      name,
-      CheckUser.MustBe,
-      false,
-    );
-
-    const notes = await this.notesModel
-      .find({ user: user._id })
-      .populate('user')
-      .exec();
-
-    return notes;
-  }
-
-  async getById(_id: string) {
-    const note = await this.notesModel
-      .findOne({ _id: new Types.ObjectId(_id) })
-      .populate('user')
-      .exec();
-
-    this.checkNote(note, _id);
-
-    return note;
-  }
-
   async createNote(dto: CreateNoteDto) {
-    const user = await this.usersService.getOneByName(
-      dto.userName,
-      CheckUser.MustBe,
-      false,
-    );
+    const user = await this.usersService.getOneByName(dto.userName, false);
 
     const newNote = new this.notesModel({ ...dto, user });
 
@@ -80,11 +50,7 @@ export class NotesService {
 
     this.checkNote(note, _id);
 
-    const user = await this.usersService.getOneByName(
-      note.user.name,
-      CheckUser.MustBe,
-      false,
-    );
+    const user = await this.usersService.getOneByName(note.user.name, false);
 
     const index = user.notes.indexOf(note._id);
     if (index > -1) {

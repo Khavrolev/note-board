@@ -1,8 +1,5 @@
 @hostname = http://localhost:8000
 
-###Get all users
-get {{hostname}}/users
-
 ### Get one user by name. Input info is param @getname
 @getname = FirstUser
 get {{hostname}}/users/{{getname}}
@@ -14,16 +11,3 @@ Content-Type: application/json
 {
     "name": "ThirdUser"
 }
-
-### Update one user. Update info is json with string 'name' and string 'newName'
-put {{hostname}}/users
-Content-Type: application/json
-
-{
-    "name": "FirstUser",
-    "newName": "StillFirstUser"
-}
-
-### Delete one user. Input info is param @getname
-@deletename = StillFirstUser
-delete {{hostname}}/users/{{deletename}}
