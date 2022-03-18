@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { UsersService } from '../users/users.service';
 import { CreateNoteDto } from './dto/CreateNoteDto';
 import { UpdateNoteDto } from './dto/UpdateNoteDto';
