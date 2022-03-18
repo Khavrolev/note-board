@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchGetData, fetchPostData } from "../utils/api";
+import { fetchGetUser, fetchCreateUser } from "../utils/api";
 
 const PREFIX = "note-board-";
 
@@ -13,7 +13,7 @@ export default function useGetUser(key) {
 
       if (currentValue !== null) {
         try {
-          const data = await fetchGetData(currentValue);
+          const data = await fetchGetUser(currentValue);
           setUser(data);
         } catch (error) {
           alert(error.response.data.message);
@@ -28,7 +28,7 @@ export default function useGetUser(key) {
       }
 
       try {
-        const data = await fetchPostData(newValue);
+        const data = await fetchCreateUser(newValue);
         setUser(data);
         localStorage.setItem(prefixedKey, newValue);
       } catch (error) {
