@@ -22,7 +22,11 @@ const Board = ({ user }) => {
 
   return (
     <div
-      onDoubleClick={(event) => createNewNote(socket, event, user)}
+      onDoubleClick={(event) => {
+        if (user) {
+          createNewNote(socket, event, user);
+        }
+      }}
       className={cl.board}
     >
       {user &&

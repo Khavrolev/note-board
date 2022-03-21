@@ -28,7 +28,6 @@ export const login = async (event, changeUser, changeIsModalOpen, setError) => {
     localStorage.setItem(process.env.REACT_APP_LOCAL, username.value);
   } catch (error) {
     setError(error.response.data.message);
-    alert(error.response.data.message);
   }
 };
 

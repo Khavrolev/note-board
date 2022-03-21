@@ -19,7 +19,7 @@ const Note = ({ note, user }) => {
         setCurrentNote(data);
       }
     });
-  }, []);
+  }, [currentNote, note, socket]);
 
   const changeable = useMemo(
     () => isChangeable(user.name, note.user.name),
@@ -45,7 +45,11 @@ const Note = ({ note, user }) => {
           [cl.note_selected]: changeable,
         })}
       >
-        <div className={cl.header}>
+        <div
+          className={classNames(cl.header, {
+            [cl.header_selected]: changeable,
+          })}
+        >
           <div className={cl.username}>{currentNote?.user.name}</div>
           {changeable ? (
             <button
