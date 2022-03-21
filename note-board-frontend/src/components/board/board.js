@@ -18,7 +18,7 @@ const Board = ({ user }) => {
         currentNotes.filter((note) => note._id !== data._id)
       );
     });
-  }, []);
+  }, [socket]);
 
   return (
     <div
