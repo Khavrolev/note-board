@@ -19,12 +19,9 @@ export class NotesService {
   }
 
   async createNote(dto: CreateNoteDto) {
-    const user = await this.usersService.getOneByName(dto.userName, false);
+    const user = await this.usersService.getOneByName(dto.userName);
 
     const newNote = new this.notesModel({ ...dto, user });
-
-    user.notes.push(newNote._id);
-    await user.save();
 
     return newNote.save();
   }
@@ -44,20 +41,9 @@ export class NotesService {
   }
 
   async deleteNote(_id: string) {
-    const note = await this.notesModel
-      .findOneAndRemove({ _id })
-      .populate('user');
+    const note = await this.notesModel.findOneAndRemove({ _id });
 
     this.checkNote(note, _id);
-
-    const user = await this.usersService.getOneByName(note.user.name, false);
-
-    const index = user.notes.indexOf(note._id);
-    if (index > -1) {
-      user.notes.splice(index, 1);
-    }
-
-    await user.save();
 
     return note;
   }

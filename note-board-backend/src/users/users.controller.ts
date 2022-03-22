@@ -8,7 +8,7 @@ export class UsersController {
 
   @Get(':name')
   getOneByName(@Param('name') name: string) {
-    return this.usersService.getOneByName(name, true);
+    return this.usersService.getOneByName(name);
   }
 
   @Post()

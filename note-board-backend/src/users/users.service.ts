@@ -15,10 +15,8 @@ export class UsersService {
     private readonly usersModel: Model<UserDocument>,
   ) {}
 
-  async getOneByName(name: string, isPopulate: boolean) {
-    const user = isPopulate
-      ? await this.usersModel.findOne({ name }).populate('notes').exec()
-      : await this.usersModel.findOne({ name }).exec();
+  async getOneByName(name: string) {
+    const user = await this.usersModel.findOne({ name }).exec();
 
     this.checkUser(user, name);
 
