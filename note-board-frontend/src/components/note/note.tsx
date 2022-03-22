@@ -24,13 +24,20 @@ const Note: FC<NoteProps> = ({ note, user }) => {
   const socket = useContext(SocketContext);
 
   useEffect(() => {
+    let isMounted = true;
     setTextColor(idealTextColor(currentNote?.color));
 
     socket.on(SocketMessageToClient.UpdateNote, (data) => {
       if (note._id === data._id) {
-        setCurrentNote(data);
+        if (isMounted) {
+          setCurrentNote(data);
+        }
       }
     });
+
+    return () => {
+      isMounted = false;
+    };
   }, [currentNote, note, socket]);
 
   const changeable = useMemo(
