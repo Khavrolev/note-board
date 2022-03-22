@@ -14,7 +14,7 @@ const Board: FC<Props> = ({ user }) => {
   const socket = useContext(SocketContext);
   const [notes, setNotes] = useState<NoteInterface[]>([]);
 
-  useEffect((): (() => void) => {
+  useEffect(() => {
     socket.on(SocketMessageToClient.GetAllNotes, setNotes);
     socket.on(SocketMessageToClient.CreateNote, (data) => {
       setNotes((currentNotes) => [...currentNotes, data]);
@@ -25,7 +25,9 @@ const Board: FC<Props> = ({ user }) => {
       );
     });
 
-    return () => socket.disconnect();
+    return () => {
+      socket.disconnect();
+    };
   }, [socket]);
 
   return (

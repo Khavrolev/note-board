@@ -40,7 +40,13 @@ const Note: FC<Props> = ({ note, user }) => {
 
   return (
     <Draggable
-      onStart={(): any => changeable}
+      onStart={() => {
+        if (changeable) {
+          return;
+        } else {
+          return false;
+        }
+      }}
       onStop={(event, data) =>
         changePosition(socket, data, currentNote, setCurrentNote)
       }

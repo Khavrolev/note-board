@@ -54,7 +54,7 @@ export const changePosition = (
 
 export const changeText = (
   socket: Socket,
-  event: any,
+  event: React.ChangeEvent<HTMLTextAreaElement>,
   currentNote: NoteInterface,
   setCurrentNote: (currentNote: NoteInterface) => void
 ) => {
@@ -65,7 +65,7 @@ export const changeText = (
 
 export const createNewNote = (
   socket: Socket,
-  event: any,
+  event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   user: UserInterface
 ) => {
   if (event.target !== event.currentTarget) {
@@ -75,7 +75,7 @@ export const createNewNote = (
     text: "",
     userName: user?.name,
     color: getRandomColor(),
-    top: event.clientY - event.target.offsetTop,
-    left: event.clientX - event.target.offsetLeft,
+    top: event.nativeEvent.offsetY,
+    left: event.nativeEvent.offsetX,
   });
 };
