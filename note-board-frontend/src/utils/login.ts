@@ -5,7 +5,8 @@ import axios from "axios";
 const LOCAL_STORAGE: string = process.env.REACT_APP_LOCAL!;
 
 export const getUserFromLocalStorage = async (
-  setUser: (data: UserInterface | null) => void
+  setUser: (data: UserInterface | null) => void,
+  setInit: (init: boolean) => void
 ) => {
   const currentValue = localStorage.getItem(LOCAL_STORAGE);
 
@@ -13,6 +14,7 @@ export const getUserFromLocalStorage = async (
     try {
       const data = await fetchGetUser(currentValue);
       setUser(data);
+      setInit(true);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error.response?.data.message);

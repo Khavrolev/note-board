@@ -9,11 +9,12 @@ import ReactModal from "react-modal";
 
 ReactModal.setAppElement("#root");
 const App: FC = () => {
+  const [init, setInit] = useState(false);
   const [user, setUser] = useState<UserInterface | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    getUserFromLocalStorage(setUser);
+    getUserFromLocalStorage(setUser, setInit);
   }, []);
 
   const changeIsModalOpen = useCallback((value) => {
@@ -36,14 +37,18 @@ const App: FC = () => {
           <div className="header_title">
             {user
               ? `Hello, ${user.name}! We're happy to see you`
+              : init
+              ? `Hello, friend! Please, wait`
               : `Hello, friend! Please, sign in`}
           </div>
-          <button
-            className="header_button"
-            onClick={() => (user ? logout(setUser) : setIsModalOpen(true))}
-          >
-            {user ? "Sign Out" : "Sign In"}
-          </button>
+          {init ? (
+            <button
+              className="header_button"
+              onClick={() => (user ? logout(setUser) : setIsModalOpen(true))}
+            >
+              {user ? "Sign Out" : "Sign In"}
+            </button>
+          ) : null}
         </div>
         <Board user={user} />
       </div>
