@@ -21,12 +21,12 @@
   background-color: rgba(0, 0, 0, 0.75);
 }
 
-input[type="text"] {
+.text {
   height: 25px;
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-input[type="submit"] {
+.submit {
   margin-top: 10px;
   cursor: pointer;
   font-size: 15px;
@@ -36,7 +36,7 @@ input[type="submit"] {
   padding: 10px 20px;
 }
 
-input[type="submit"]:hover {
+.submit:hover {
   background: #6cf0c2;
 }
 

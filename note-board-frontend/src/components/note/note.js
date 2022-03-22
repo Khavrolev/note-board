@@ -2,9 +2,10 @@ import classNames from "classnames";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { idealTextColor } from "../../utils/getColor";
 import Draggable from "react-draggable";
-import cl from "./note.module.css";
+import classes from "./note.module.css";
 import { SocketContext } from "../../contexts/SocketProvider";
-import { changePosition, changeText, deleteNote } from "../../utils/socket";
+import { changePosition, changeText } from "../../utils/socket";
+import Close from "./close/close";
 
 const Note = ({ note, user }) => {
   const [textColor, setTextColor] = useState(null);
@@ -33,45 +34,29 @@ const Note = ({ note, user }) => {
         changePosition(socket, data, currentNote, setCurrentNote)
       }
       position={{ x: currentNote.left, y: currentNote.top }}
-      handle={`.${cl.header}`}
-      cancel={`.${cl.note_delete}`}
+      handle={`.${classes.header}`}
+      cancel={`.${classes.note_delete}`}
     >
       <div
         style={{
           backgroundColor: currentNote?.color,
           color: textColor,
         }}
-        className={classNames(cl.note, {
-          [cl.note_selected]: changeable,
+        className={classNames(classes.note, {
+          [classes.note_selected]: changeable,
         })}
       >
         <div
-          className={classNames(cl.header, {
-            [cl.header_selected]: changeable,
+          className={classNames(classes.header, {
+            [classes.header_selected]: changeable,
           })}
         >
-          <div className={cl.username}>{currentNote?.user.name}</div>
+          <div className={classes.username}>{currentNote?.user.name}</div>
           {changeable ? (
-            <button
-              style={{
-                color: textColor,
-              }}
-              className={cl.note_delete}
-              onClick={() => deleteNote(socket, currentNote._id)}
-            >
-              <svg
-                style={{ width: "24px", height: "24px" }}
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentColor"
-                  d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
-                />
-              </svg>
-            </button>
+            <Close textColor={textColor} _id={currentNote._id} />
           ) : null}
         </div>
-        <div className={cl.text}>
+        <div className={classes.text}>
           <textarea
             style={{
               color: textColor,

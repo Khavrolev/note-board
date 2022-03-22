@@ -43,13 +43,6 @@ textarea {
   align-self: center;
 }
 
-.note_delete {
-  margin-left: auto;
-  padding: 0px 2px;
-  cursor: pointer;
-  background-color: transparent;
-}
-
 .text {
   padding: 10px;
 }

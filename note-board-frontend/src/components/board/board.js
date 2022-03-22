@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../contexts/SocketProvider";
 import { createNewNote } from "../../utils/socket";
 import Note from "../note/note";
-import cl from "./board.module.css";
+import classes from "./board.module.css";
 
 const Board = ({ user }) => {
   const socket = useContext(SocketContext);
@@ -18,21 +18,21 @@ const Board = ({ user }) => {
         currentNotes.filter((note) => note._id !== data._id)
       );
     });
+
+    return () => socket.disconnect();
   }, [socket]);
 
   return (
     <div
-      onDoubleClick={(event) => {
+      onClick={(event) => {
         if (user) {
           createNewNote(socket, event, user);
         }
       }}
-      className={cl.board}
+      className={classes.board}
     >
       {user &&
-        notes?.map((note, index) => (
-          <Note key={note._id} note={note} user={user} />
-        ))}
+        notes?.map((note) => <Note key={note._id} note={note} user={user} />)}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "react-modal/lib/components/Modal";
 import { login } from "../../utils/login";
-import cl from "./popup.module.css";
+import classes from "./popup.module.css";
 
 const Popup = ({ isModalOpen, changeIsModalOpen, changeUser }) => {
   const [error, setError] = useState("");
@@ -13,30 +13,35 @@ const Popup = ({ isModalOpen, changeIsModalOpen, changeUser }) => {
         changeIsModalOpen(false);
         setError("");
       }}
-      className={cl.modal}
-      overlayClassName={cl.overlay}
+      className={classes.modal}
+      overlayClassName={classes.overlay}
     >
-      <div className={cl.title}>Sign In</div>
-      <div className={cl.form}>
+      <div className={classes.title}>Sign In</div>
+      <div className={classes.form}>
         <form
           onSubmit={(event) =>
             login(event, changeUser, changeIsModalOpen, setError)
           }
         >
-          <div className={cl.input_container}>
+          <div className={classes.input_container}>
             <label>Username </label>
-            <input type="text" name="username" required />
+            <input
+              className={classes.text}
+              type="text"
+              name="username"
+              required
+            />
             <div
               style={{
                 visibility: error ? "visible" : "hidden",
               }}
-              className={cl.error}
+              className={classes.error}
             >
               {error}
             </div>
           </div>
-          <div className={cl.button_container}>
-            <input type="submit" />
+          <div className={classes.button_container}>
+            <input className={classes.submit} type="submit" />
           </div>
         </form>
       </div>
