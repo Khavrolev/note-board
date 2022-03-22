@@ -13,6 +13,19 @@ import { Server } from 'http';
 import { Socket } from 'socket.io';
 import { NotesService } from './notes/notes.service';
 
+enum SocketMessageToClient {
+  GetAllNotes = 'all-notes-to-client',
+  CreateNote = 'create-note-to-client',
+  UpdateNote = 'update-note-to-client',
+  DeleteNote = 'delete-note-to-client',
+}
+
+enum SocketMessageToServer {
+  CreateNote = 'create-note-to-server',
+  UpdateNote = 'update-note-to-server',
+  DeleteNote = 'delete-note-to-server',
+}
+
 @WebSocketGateway({
   cors: true,
 })
@@ -37,7 +50,7 @@ export class AppGateway
       `Connected: ${this.countClients}, Connection id: ${client.id}`,
     );
     const notes = await this.notesService.getAll();
-    client.emit('all-notes-to-client', notes);
+    client.emit(SocketMessageToClient.GetAllNotes, notes);
   }
 
   handleDisconnect(client: any) {
@@ -47,24 +60,24 @@ export class AppGateway
     );
   }
 
-  @SubscribeMessage('create-note-to-server')
+  @SubscribeMessage(SocketMessageToServer.CreateNote)
   async createNote(@MessageBody() data, @ConnectedSocket() client: Socket) {
     this.logger.log(`Create note from id: ${client.id}`);
     const note = await this.notesService.createNote(data);
-    this.wss.emit('create-note-to-client', note);
+    this.wss.emit(SocketMessageToClient.CreateNote, note);
   }
 
-  @SubscribeMessage('update-note-to-server')
+  @SubscribeMessage(SocketMessageToServer.UpdateNote)
   async updateNote(@MessageBody() data, @ConnectedSocket() client: Socket) {
     this.logger.log(`Update note from id: ${client.id}`);
     const note = await this.notesService.updateNote(data);
-    client.broadcast.emit('update-note-to-client', note);
+    client.broadcast.emit(SocketMessageToClient.UpdateNote, note);
   }
 
-  @SubscribeMessage('delete-note-to-server')
+  @SubscribeMessage(SocketMessageToServer.DeleteNote)
   async deleteNote(@MessageBody() data, @ConnectedSocket() client: Socket) {
     this.logger.log(`Delete note from id: ${client.id}`);
     const note = await this.notesService.deleteNote(data);
-    this.wss.emit('delete-note-to-client', note);
+    this.wss.emit(SocketMessageToClient.DeleteNote, note);
   }
 }
