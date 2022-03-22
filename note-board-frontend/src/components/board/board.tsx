@@ -6,11 +6,11 @@ import { createNewNote, SocketMessageToClient } from "../../utils/socket";
 import Note from "../note/note";
 import classes from "./board.module.css";
 
-interface Props {
+interface BoardProps {
   user: UserInterface | null;
 }
 
-const Board: FC<Props> = ({ user }) => {
+const Board: FC<BoardProps> = ({ user }) => {
   const socket = useContext(SocketContext);
   const [notes, setNotes] = useState<NoteInterface[]>([]);
 

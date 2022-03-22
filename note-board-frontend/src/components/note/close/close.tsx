@@ -3,12 +3,12 @@ import { SocketContext } from "../../../contexts/SocketProvider";
 import { deleteNote } from "../../../utils/socket";
 import classes from "./close.module.css";
 
-interface Props {
+interface CloseProps {
   textColor: string;
   _id: number;
 }
 
-const Close: FC<Props> = ({ textColor, _id }) => {
+const Close: FC<CloseProps> = ({ textColor, _id }) => {
   const socket = useContext(SocketContext);
 
   return (

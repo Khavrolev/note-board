@@ -4,13 +4,17 @@ import { UserInterface } from "../../interfaces/UserInterface";
 import { login } from "../../utils/login";
 import classes from "./popup.module.css";
 
-interface Props {
+interface PopupProps {
   isModalOpen: boolean;
   changeIsModalOpen: (isModalOpen: boolean) => void;
   changeUser: (user: UserInterface | null) => void;
 }
 
-const Popup: FC<Props> = ({ isModalOpen, changeIsModalOpen, changeUser }) => {
+const Popup: FC<PopupProps> = ({
+  isModalOpen,
+  changeIsModalOpen,
+  changeUser,
+}) => {
   const [error, setError] = useState("");
 
   return (

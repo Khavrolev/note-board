@@ -13,12 +13,12 @@ import Close from "./close/close";
 import { NoteInterface } from "../../interfaces/NoteInterface";
 import { UserInterface } from "../../interfaces/UserInterface";
 
-interface Props {
+interface NoteProps {
   note: NoteInterface;
   user: UserInterface;
 }
 
-const Note: FC<Props> = ({ note, user }) => {
+const Note: FC<NoteProps> = ({ note, user }) => {
   const [textColor, setTextColor] = useState("");
   const [currentNote, setCurrentNote] = useState(note);
   const socket = useContext(SocketContext);
