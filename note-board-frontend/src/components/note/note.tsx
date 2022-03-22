@@ -1,21 +1,32 @@
 import classNames from "classnames";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import { FC, useContext, useEffect, useMemo, useState } from "react";
 import { idealTextColor } from "../../utils/getColor";
 import Draggable from "react-draggable";
 import classes from "./note.module.css";
 import { SocketContext } from "../../contexts/SocketProvider";
-import { changePosition, changeText } from "../../utils/socket";
+import {
+  changePosition,
+  changeText,
+  SocketMessageToClient,
+} from "../../utils/socket";
 import Close from "./close/close";
+import { NoteInterface } from "../../interfaces/NoteInterface";
+import { UserInterface } from "../../interfaces/UserInterface";
 
-const Note = ({ note, user }) => {
-  const [textColor, setTextColor] = useState(null);
+interface Props {
+  note: NoteInterface;
+  user: UserInterface;
+}
+
+const Note: FC<Props> = ({ note, user }) => {
+  const [textColor, setTextColor] = useState("");
   const [currentNote, setCurrentNote] = useState(note);
   const socket = useContext(SocketContext);
 
   useEffect(() => {
     setTextColor(idealTextColor(currentNote?.color));
 
-    socket.on("update-note-to-client", (data) => {
+    socket.on(SocketMessageToClient.UpdateNote, (data) => {
       if (note._id === data._id) {
         setCurrentNote(data);
       }
@@ -29,7 +40,7 @@ const Note = ({ note, user }) => {
 
   return (
     <Draggable
-      onStart={() => changeable}
+      onStart={(): any => changeable}
       onStop={(event, data) =>
         changePosition(socket, data, currentNote, setCurrentNote)
       }
@@ -73,6 +84,7 @@ const Note = ({ note, user }) => {
   );
 };
 
-const isChangeable = (userName, notesUserName) => userName === notesUserName;
+const isChangeable = (userName: string, notesUserName: string) =>
+  userName === notesUserName;
 
 export default Note;

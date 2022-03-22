@@ -1,9 +1,16 @@
-import { useState } from "react";
-import Modal from "react-modal/lib/components/Modal";
+import { FC, useState } from "react";
+import Modal from "react-modal";
+import { UserInterface } from "../../interfaces/UserInterface";
 import { login } from "../../utils/login";
 import classes from "./popup.module.css";
 
-const Popup = ({ isModalOpen, changeIsModalOpen, changeUser }) => {
+interface Props {
+  isModalOpen: boolean;
+  changeIsModalOpen: (isModalOpen: boolean) => void;
+  changeUser: (user: UserInterface | null) => void;
+}
+
+const Popup: FC<Props> = ({ isModalOpen, changeIsModalOpen, changeUser }) => {
   const [error, setError] = useState("");
 
   return (
@@ -19,9 +26,10 @@ const Popup = ({ isModalOpen, changeIsModalOpen, changeUser }) => {
       <div className={classes.title}>Sign In</div>
       <div className={classes.form}>
         <form
-          onSubmit={(event) =>
-            login(event, changeUser, changeIsModalOpen, setError)
-          }
+          onSubmit={(event) => {
+            event.preventDefault();
+            login(changeUser, changeIsModalOpen, setError);
+          }}
         >
           <div className={classes.input_container}>
             <label>Username </label>

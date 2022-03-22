@@ -1,14 +1,15 @@
 import Board from "./components/board/board";
-import Modal from "react-modal";
 import { socket, SocketContext } from "./contexts/SocketProvider";
 import "./App.css";
-import { useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { getUserFromLocalStorage, logout } from "./utils/login";
 import Popup from "./components/popup/popup";
+import { UserInterface } from "./interfaces/UserInterface";
+import ReactModal from "react-modal";
 
-Modal.setAppElement("#root");
-function App() {
-  const [user, setUser] = useState(null);
+ReactModal.setAppElement("#root");
+const App: FC = () => {
+  const [user, setUser] = useState<UserInterface | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -48,6 +49,6 @@ function App() {
       </div>
     </SocketContext.Provider>
   );
-}
+};
 
 export default App;
