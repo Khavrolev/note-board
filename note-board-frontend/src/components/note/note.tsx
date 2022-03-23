@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { FC, useContext, useEffect, useMemo, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { idealTextColor } from "../../utils/getColor";
 import Draggable from "react-draggable";
 import classes from "./note.module.css";
@@ -38,10 +38,7 @@ const Note: FC<NoteProps> = ({ note, user }) => {
     };
   }, [currentNote, note, socket]);
 
-  const changeable = useMemo(
-    () => isChangeable(user.name, note.user.name),
-    [user.name, note.user.name]
-  );
+  const changeable = isChangeable(user.name, note.user.name);
 
   return (
     <Draggable

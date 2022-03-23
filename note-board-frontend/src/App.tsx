@@ -12,7 +12,7 @@ import {
 } from "./utils/localstorage";
 
 const App: FC = () => {
-  const [init, setInit] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<UserInterface | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -47,10 +47,10 @@ const App: FC = () => {
           console.log(error);
         }
       } finally {
-        setInit(true);
+        setLoading(true);
       }
     } else {
-      setInit(true);
+      setLoading(true);
     }
   };
 
@@ -66,11 +66,11 @@ const App: FC = () => {
           <div className="header_title">
             {user
               ? `Hello, ${user.name}! We're happy to see you`
-              : init
+              : loading
               ? `Hello, friend! Please, sign in`
-              : ``}
+              : `loading...`}
           </div>
-          {init ? (
+          {loading ? (
             <button
               className="header_button"
               onClick={() => (user ? logout() : setIsModalOpen(true))}

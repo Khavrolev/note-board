@@ -45,13 +45,15 @@ const Popup: FC<PopupProps> = ({
     }
   };
 
+  const onRequestClose = () => {
+    changeIsModalOpen(false);
+    setError("");
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
-      onRequestClose={() => {
-        changeIsModalOpen(false);
-        setError("");
-      }}
+      onRequestClose={onRequestClose}
       className={classes.modal}
       overlayClassName={classes.overlay}
     >

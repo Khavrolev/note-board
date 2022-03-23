@@ -30,15 +30,14 @@ const Board: FC<BoardProps> = ({ user }) => {
     };
   }, [socket]);
 
+  const onClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (user) {
+      createNewNote(socket, event, user);
+    }
+  };
+
   return (
-    <div
-      onClick={(event) => {
-        if (user) {
-          createNewNote(socket, event, user);
-        }
-      }}
-      className={classes.board}
-    >
+    <div onClick={(event) => onClick(event)} className={classes.board}>
       {user &&
         notes?.map((note) => <Note key={note._id} note={note} user={user} />)}
     </div>
