@@ -2,7 +2,8 @@ import { FC, useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../contexts/SocketProvider";
 import { NoteInterface } from "../../interfaces/NoteInterface";
 import { UserInterface } from "../../interfaces/UserInterface";
-import { createNewNote, SocketMessageToClient } from "../../utils/socket";
+import { getRandomColor } from "../../utils/getColor";
+import { createNote, SocketMessageToClient } from "../../utils/socket";
 import Note from "../note/note";
 import classes from "./board.module.css";
 
@@ -32,7 +33,16 @@ const Board: FC<BoardProps> = ({ user }) => {
 
   const onClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (user) {
-      createNewNote(socket, event, user);
+      if (event.target !== event.currentTarget) {
+        return;
+      }
+      createNote(socket, {
+        text: "",
+        userName: user?.name,
+        color: getRandomColor(),
+        top: event.nativeEvent.offsetY,
+        left: event.nativeEvent.offsetX,
+      });
     }
   };
 

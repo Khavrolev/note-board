@@ -1,8 +1,5 @@
-import { DraggableData } from "react-draggable";
 import { Socket } from "socket.io-client";
 import { NoteInterface } from "../interfaces/NoteInterface";
-import { UserInterface } from "../interfaces/UserInterface";
-import { getRandomColor } from "./getColor";
 
 export enum SocketMessageToClient {
   GetAllNotes = "all-notes-to-client",
@@ -25,57 +22,14 @@ interface CreateNote {
   text: string;
 }
 
-const createNote = (socket: Socket, note: CreateNote) => {
+export const createNote = (socket: Socket, note: CreateNote) => {
   socket.emit(SocketMessageToServer.CreateNote, note);
 };
 
-const updateNote = (socket: Socket, note: NoteInterface) => {
+export const updateNote = (socket: Socket, note: NoteInterface) => {
   socket.emit(SocketMessageToServer.UpdateNote, note);
 };
 
 export const deleteNote = (socket: Socket, id: number) => {
   socket.emit(SocketMessageToServer.DeleteNote, id);
-};
-
-export const changePosition = (
-  socket: Socket,
-  data: DraggableData,
-  currentNote: NoteInterface,
-  setCurrentNote: (currentNote: NoteInterface) => void
-) => {
-  const newNote = {
-    ...currentNote,
-    top: data.y,
-    left: data.x,
-  };
-  updateNote(socket, newNote);
-  setCurrentNote(newNote);
-};
-
-export const changeText = (
-  socket: Socket,
-  event: React.ChangeEvent<HTMLTextAreaElement>,
-  currentNote: NoteInterface,
-  setCurrentNote: (currentNote: NoteInterface) => void
-) => {
-  const newNote = { ...currentNote, text: event.target.value };
-  updateNote(socket, newNote);
-  setCurrentNote(newNote);
-};
-
-export const createNewNote = (
-  socket: Socket,
-  event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  user: UserInterface
-) => {
-  if (event.target !== event.currentTarget) {
-    return;
-  }
-  createNote(socket, {
-    text: "",
-    userName: user?.name,
-    color: getRandomColor(),
-    top: event.nativeEvent.offsetY,
-    left: event.nativeEvent.offsetX,
-  });
 };

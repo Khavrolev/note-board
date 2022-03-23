@@ -1,14 +1,10 @@
 import classNames from "classnames";
 import { FC, useContext, useEffect, useState } from "react";
 import { idealTextColor } from "../../utils/getColor";
-import Draggable from "react-draggable";
+import Draggable, { DraggableData } from "react-draggable";
 import classes from "./note.module.css";
 import { SocketContext } from "../../contexts/SocketProvider";
-import {
-  changePosition,
-  changeText,
-  SocketMessageToClient,
-} from "../../utils/socket";
+import { SocketMessageToClient, updateNote } from "../../utils/socket";
 import Close from "./close/close";
 import { NoteInterface } from "../../interfaces/NoteInterface";
 import { UserInterface } from "../../interfaces/UserInterface";
@@ -24,21 +20,38 @@ const Note: FC<NoteProps> = ({ note, user }) => {
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    let isMounted = true;
-    setTextColor(idealTextColor(currentNote?.color));
-
-    socket.on(SocketMessageToClient.UpdateNote, (data) => {
-      if (note._id === data._id && isMounted) {
+    const updateInfoFromSocket = (data: any) => {
+      if (note._id === data._id) {
         setCurrentNote(data);
       }
-    });
+    };
+
+    setTextColor(idealTextColor(currentNote?.color));
+
+    socket.on(SocketMessageToClient.UpdateNote, updateInfoFromSocket);
 
     return () => {
-      isMounted = false;
+      socket.off(SocketMessageToClient.UpdateNote, updateInfoFromSocket);
     };
   }, [currentNote, note, socket]);
 
   const changeable = isChangeable(user.name, note.user.name);
+
+  const changeText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newNote = { ...currentNote, text: event.target.value };
+    updateNote(socket, newNote);
+    setCurrentNote(newNote);
+  };
+
+  const changePosition = (data: DraggableData) => {
+    const newNote = {
+      ...currentNote,
+      top: data.y,
+      left: data.x,
+    };
+    updateNote(socket, newNote);
+    setCurrentNote(newNote);
+  };
 
   return (
     <Draggable
@@ -47,9 +60,7 @@ const Note: FC<NoteProps> = ({ note, user }) => {
           return false;
         }
       }}
-      onStop={(event, data) =>
-        changePosition(socket, data, currentNote, setCurrentNote)
-      }
+      onStop={(event, data) => changePosition(data)}
       position={{ x: currentNote.left, y: currentNote.top }}
       handle={`.${classes.header}`}
       cancel={`.${classes.note_delete}`}
@@ -80,9 +91,7 @@ const Note: FC<NoteProps> = ({ note, user }) => {
             }}
             value={currentNote?.text}
             readOnly={!changeable}
-            onChange={(event) =>
-              changeText(socket, event, currentNote, setCurrentNote)
-            }
+            onChange={(event) => changeText(event)}
           ></textarea>
         </div>
       </div>
