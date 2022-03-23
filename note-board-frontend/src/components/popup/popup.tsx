@@ -1,7 +1,9 @@
+import axios from "axios";
 import { FC, useState } from "react";
 import Modal from "react-modal";
 import { UserInterface } from "../../interfaces/UserInterface";
-import { login } from "../../utils/login";
+import { fetchCreateUser } from "../../utils/api";
+import { setToLocalStorage } from "../../utils/localstorage";
 import classes from "./popup.module.css";
 
 interface PopupProps {
@@ -17,6 +19,32 @@ const Popup: FC<PopupProps> = ({
 }) => {
   const [error, setError] = useState("");
 
+  const onSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    const target = event.target as typeof event.target & {
+      username: { value: string };
+    };
+
+    const username = target.username.value;
+
+    if (!username) {
+      return;
+    }
+
+    try {
+      const data = await fetchCreateUser(username);
+      changeUser(data);
+      changeIsModalOpen(false);
+      setToLocalStorage(username);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data.message);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
@@ -29,12 +57,7 @@ const Popup: FC<PopupProps> = ({
     >
       <div className={classes.title}>Sign In</div>
       <div className={classes.form}>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            login(changeUser, changeIsModalOpen, setError);
-          }}
-        >
+        <form onSubmit={(event) => onSubmit(event)}>
           <div className={classes.input_container}>
             <label>Username </label>
             <input

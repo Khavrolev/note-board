@@ -2,19 +2,22 @@ import Board from "./components/board/board";
 import { socket, SocketContext } from "./contexts/SocketProvider";
 import "./App.css";
 import { FC, useCallback, useEffect, useState } from "react";
-import { getUserFromLocalStorage, logout } from "./utils/login";
 import Popup from "./components/popup/popup";
 import { UserInterface } from "./interfaces/UserInterface";
-import Modal from "react-modal";
+import { fetchGetUser } from "./utils/api";
+import axios from "axios";
+import {
+  getFromLocalStorage,
+  removeFromLocalStorage,
+} from "./utils/localstorage";
 
-Modal.setAppElement("#root");
 const App: FC = () => {
   const [init, setInit] = useState(false);
   const [user, setUser] = useState<UserInterface | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    getUserFromLocalStorage(setUser, setInit);
+    getUserFromLocalStorage();
   }, []);
 
   const changeIsModalOpen = useCallback((value) => {
@@ -24,6 +27,32 @@ const App: FC = () => {
   const changeUser = useCallback((value) => {
     setUser(value);
   }, []);
+
+  const logout = () => {
+    removeFromLocalStorage();
+    setUser(null);
+  };
+
+  const getUserFromLocalStorage = async () => {
+    const currentValue = getFromLocalStorage();
+
+    if (currentValue) {
+      try {
+        const data = await fetchGetUser(currentValue);
+        setUser(data);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.log(error.response?.data.message);
+        } else {
+          console.log(error);
+        }
+      } finally {
+        setInit(true);
+      }
+    } else {
+      setInit(true);
+    }
+  };
 
   return (
     <SocketContext.Provider value={socket}>
@@ -44,7 +73,7 @@ const App: FC = () => {
           {init ? (
             <button
               className="header_button"
-              onClick={() => (user ? logout(setUser) : setIsModalOpen(true))}
+              onClick={() => (user ? logout() : setIsModalOpen(true))}
             >
               {user ? "Sign Out" : "Sign In"}
             </button>
