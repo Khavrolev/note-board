@@ -1,4 +1,4 @@
-export const getRandomColor = (): string => {
+export const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
   let color = "#";
   for (let i = 0; i < 6; i++) {
@@ -7,7 +7,7 @@ export const getRandomColor = (): string => {
   return color;
 };
 
-export const idealTextColor = (bgColor: string): string => {
+export const idealTextColor = (bgColor: string) => {
   const nThreshold = 105;
   const components = getRGBComponents(bgColor);
   const bgDelta =

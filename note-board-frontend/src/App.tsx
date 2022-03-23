@@ -5,9 +5,9 @@ import { FC, useCallback, useEffect, useState } from "react";
 import { getUserFromLocalStorage, logout } from "./utils/login";
 import Popup from "./components/popup/popup";
 import { UserInterface } from "./interfaces/UserInterface";
-import ReactModal from "react-modal";
+import Modal from "react-modal";
 
-ReactModal.setAppElement("#root");
+Modal.setAppElement("#root");
 const App: FC = () => {
   const [init, setInit] = useState(false);
   const [user, setUser] = useState<UserInterface | null>(null);
@@ -38,8 +38,8 @@ const App: FC = () => {
             {user
               ? `Hello, ${user.name}! We're happy to see you`
               : init
-              ? `Hello, friend! Please, wait`
-              : `Hello, friend! Please, sign in`}
+              ? `Hello, friend! Please, sign in`
+              : ``}
           </div>
           {init ? (
             <button

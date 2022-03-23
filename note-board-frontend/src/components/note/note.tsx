@@ -28,10 +28,8 @@ const Note: FC<NoteProps> = ({ note, user }) => {
     setTextColor(idealTextColor(currentNote?.color));
 
     socket.on(SocketMessageToClient.UpdateNote, (data) => {
-      if (note._id === data._id) {
-        if (isMounted) {
-          setCurrentNote(data);
-        }
+      if (note._id === data._id && isMounted) {
+        setCurrentNote(data);
       }
     });
 
@@ -48,9 +46,7 @@ const Note: FC<NoteProps> = ({ note, user }) => {
   return (
     <Draggable
       onStart={() => {
-        if (changeable) {
-          return;
-        } else {
+        if (!changeable) {
           return false;
         }
       }}

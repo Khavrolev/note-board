@@ -14,13 +14,14 @@ export const getUserFromLocalStorage = async (
     try {
       const data = await fetchGetUser(currentValue);
       setUser(data);
-      setInit(true);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error.response?.data.message);
       } else {
         console.log(error);
       }
+    } finally {
+      setInit(true);
     }
   }
 };

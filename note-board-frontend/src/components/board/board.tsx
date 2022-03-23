@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../contexts/SocketProvider";
 import { NoteInterface } from "../../interfaces/NoteInterface";
 import { UserInterface } from "../../interfaces/UserInterface";
