@@ -27,12 +27,10 @@ export class NotesService {
   }
 
   async updateNote(dto: UpdateNoteDto) {
+    const { _id, text, top, left } = dto;
+
     const updatedNote = await this.notesModel
-      .findOneAndUpdate(
-        { _id: dto._id },
-        { text: dto.text, top: dto.top, left: dto.left },
-        { returnOriginal: false },
-      )
+      .findOneAndUpdate({ _id }, { text, top, left }, { returnOriginal: false })
       .populate('user');
 
     this.checkNote(updatedNote, dto._id);
