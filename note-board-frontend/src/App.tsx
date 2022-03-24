@@ -1,7 +1,7 @@
 import Board from "./components/board/board";
-import { socket, SocketContext } from "./contexts/SocketProvider";
+import { SocketContext } from "./contexts/SocketProvider";
 import "./App.css";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useContext, useEffect, useState } from "react";
 import Popup from "./components/popup/popup";
 import { UserInterface } from "./interfaces/UserInterface";
 import { fetchGetUser } from "./utils/api";
@@ -11,15 +11,32 @@ import {
   removeFromLocalStorage,
 } from "./utils/localstorage";
 import { UserContext } from "./contexts/UserProvider";
+import { NoteInterface } from "./interfaces/NoteInterface";
+import { SocketMessageToClient } from "./utils/socket";
 
 const App: FC = () => {
+  const socket = useContext(SocketContext);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<UserInterface | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [notes, setNotes] = useState<NoteInterface[]>([]);
 
   useEffect(() => {
     getUserFromLocalStorage();
-  }, []);
+    socket.on(SocketMessageToClient.GetAllNotes, setNotes);
+    socket.on(SocketMessageToClient.CreateNote, (data) => {
+      setNotes((currentNotes) => [...currentNotes, data]);
+    });
+    socket.on(SocketMessageToClient.DeleteNote, (data) => {
+      setNotes((currentNotes) =>
+        currentNotes.filter((note) => note._id !== data._id)
+      );
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket]);
 
   const changeIsModalOpen = useCallback((value) => {
     setIsModalOpen(value);
@@ -81,7 +98,7 @@ const App: FC = () => {
               </button>
             ) : null}
           </div>
-          <Board />
+          {user ? <Board notes={notes} /> : null}
         </div>
       </SocketContext.Provider>
     </UserContext.Provider>
