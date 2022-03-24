@@ -10,7 +10,7 @@ import {
 export const useNotes = () => {
   const [notes, setNotes] = useState<NoteInterface[]>([]);
 
-  const changeNotes = (newNote: NoteInterface) => {
+  const handleChangeNote = (newNote: NoteInterface) => {
     setNotes((currentNotes: NoteInterface[]) =>
       currentNotes.map((note) => (note._id === newNote._id ? newNote : note))
     );
@@ -28,12 +28,14 @@ export const useNotes = () => {
         currentNotes.filter((note) => note._id !== data._id)
       );
     });
-    socket.on(SocketMessageToClient.UpdateNote, (data) => changeNotes(data));
+    socket.on(SocketMessageToClient.UpdateNote, (data) =>
+      handleChangeNote(data)
+    );
 
     return () => {
       disconnectSocket();
     };
   }, []);
 
-  return { notes, changeNotes };
+  return { notes, handleChangeNote };
 };

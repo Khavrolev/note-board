@@ -47,14 +47,14 @@ export const disconnectSocket = () => {
   socket.disconnect();
 };
 
-export const createNote = (note: CreateNote) => {
+export const createNoteOnServer = (note: CreateNote) => {
   socket.emit(SocketMessageToServer.CreateNote, note);
 };
 
-export const updateNote = (note: NoteInterface) => {
+export const updateNoteOnServer = (note: NoteInterface) => {
   socket.emit(SocketMessageToServer.UpdateNote, note);
 };
 
-export const deleteNote = (id: string) => {
+export const deleteNoteOnServer = (id: string) => {
   socket.emit(SocketMessageToServer.DeleteNote, id);
 };

@@ -2,40 +2,56 @@ import axios from "axios";
 import { FC, useState } from "react";
 import Modal from "react-modal";
 import { UserInterface } from "../../interfaces/UserInterface";
+import { fetchCreateUser, fetchGetUser } from "../../utils/api";
 import { setToLocalStorage } from "../../utils/localstorage";
 import classes from "./popup.module.css";
 
+export enum SignPopup {
+  Up = "Sign up",
+  In = "Sign in",
+}
+
 interface PopupProps {
   isModalOpen: boolean;
-  changeIsModalOpen: (isModalOpen: boolean) => void;
-  changeUser: (user: UserInterface | null) => void;
-  fetchFunction: (userName: string) => Promise<any>;
+  type: SignPopup;
+  onIsModalOpenChange: (isModalOpen: boolean) => void;
+  onUserChange: (user: UserInterface | null) => void;
 }
 
 const Popup: FC<PopupProps> = ({
   isModalOpen,
-  changeIsModalOpen,
-  changeUser,
-  fetchFunction,
+  type,
+  onIsModalOpenChange,
+  onUserChange,
 }) => {
   const [error, setError] = useState("");
 
-  const onSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    const target = event.target as typeof event.target & {
-      username: { value: string };
-    };
+  const getFetchFunction = () => {
+    if (type === SignPopup.Up) {
+      return fetchCreateUser;
+    } else if (type === SignPopup.In) {
+      return fetchGetUser;
+    }
 
-    const username = target.username.value;
+    return () => {
+      throw new Error("Wrong popup type");
+    };
+  };
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const username = event.currentTarget.username.value;
 
     if (!username) {
       return;
     }
 
     try {
+      const fetchFunction = getFetchFunction();
+
       const data = await fetchFunction(username);
-      changeUser(data);
-      changeIsModalOpen(false);
+      onUserChange(data);
+      onIsModalOpenChange(false);
       setToLocalStorage(username);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -47,7 +63,7 @@ const Popup: FC<PopupProps> = ({
   };
 
   const onRequestClose = () => {
-    changeIsModalOpen(false);
+    onIsModalOpenChange(false);
     setError("");
   };
 
@@ -58,9 +74,9 @@ const Popup: FC<PopupProps> = ({
       className={classes.modal}
       overlayClassName={classes.overlay}
     >
-      <div className={classes.title}>Type info</div>
+      <div className={classes.title}>{[type]}</div>
       <div className={classes.form}>
-        <form onSubmit={(event) => onSubmit(event)}>
+        <form onSubmit={onSubmit}>
           <div className={classes.input_container}>
             <label>Username </label>
             <input
