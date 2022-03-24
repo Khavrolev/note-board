@@ -17,7 +17,7 @@ interface NoteProps {
 }
 
 const Note: FC<NoteProps> = ({ note, changeText, changePosition }) => {
-  const [textColor] = useState(idealTextColor(note?.color));
+  const [textColor] = useState(idealTextColor(note.color));
   const user = useContext(UserContext);
 
   const changeable = isChangeable(user?.name, note.user.name);
