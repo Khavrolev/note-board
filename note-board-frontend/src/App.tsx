@@ -1,5 +1,5 @@
 import Board from "./components/board/board";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Popup, { SignPopup } from "./components/popup/popup";
 import { UserInterface } from "./interfaces/UserInterface";
 import { fetchGetUser } from "./utils/api";
@@ -20,10 +20,6 @@ const App: FC = () => {
 
   useEffect(() => {
     getUserFromLocalStorage();
-  }, []);
-
-  const handleUserChange = useCallback((value) => {
-    setUser(value);
   }, []);
 
   const signOut = () => {
@@ -82,7 +78,7 @@ const App: FC = () => {
           isModalOpen={isModalOpen}
           type={popupType}
           onIsModalOpenChange={setIsModalOpen}
-          onUserChange={handleUserChange}
+          onUserChange={setUser}
         />
         <div className={classes.header}>
           <div className={classes.header_title}>{getHeaderText()}</div>

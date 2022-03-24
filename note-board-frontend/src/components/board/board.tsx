@@ -1,4 +1,4 @@
-import { FC, useContext } from "react";
+import { FC, useCallback, useContext } from "react";
 import { UserContext } from "../../contexts/UserProvider";
 import { useNotes } from "../../hooks/useNotes";
 import { NoteInterface } from "../../interfaces/NoteInterface";
@@ -26,10 +26,13 @@ const Board: FC = () => {
     });
   };
 
-  const handleChangeAndUpdateNote = (newNote: NoteInterface) => {
-    handleChangeNote(newNote);
-    updateNoteOnServer(newNote);
-  };
+  const handleChangeAndUpdateNote = useCallback(
+    (newNote: NoteInterface) => {
+      handleChangeNote(newNote);
+      updateNoteOnServer(newNote);
+    },
+    [handleChangeNote]
+  );
 
   return (
     <div onDoubleClick={handleCreateNewNote} className={classes.board}>
