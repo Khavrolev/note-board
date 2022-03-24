@@ -1,8 +1,9 @@
 import { FC, useContext } from "react";
 import { UserContext } from "../../contexts/UserProvider";
 import { useNotes } from "../../hooks/useNotes";
+import { NoteInterface } from "../../interfaces/NoteInterface";
 import { getRandomColor } from "../../utils/getColor";
-import { createNoteOnServer } from "../../utils/socket";
+import { createNoteOnServer, updateNoteOnServer } from "../../utils/socket";
 import Note from "../note/note";
 import classes from "./board.module.css";
 
@@ -25,6 +26,11 @@ const Board: FC = () => {
     });
   };
 
+  const handleChangeAndUpdateNote = (newNote: NoteInterface) => {
+    handleChangeNote(newNote);
+    updateNoteOnServer(newNote);
+  };
+
   return (
     <div onDoubleClick={handleCreateNewNote} className={classes.board}>
       {user &&
@@ -32,7 +38,7 @@ const Board: FC = () => {
           <Note
             key={note._id}
             note={note}
-            handleChangeNote={handleChangeNote}
+            onChangeAndUpdateNote={handleChangeAndUpdateNote}
           />
         ))}
     </div>

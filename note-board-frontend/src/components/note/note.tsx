@@ -6,14 +6,13 @@ import classes from "./note.module.css";
 import Close from "./close/close";
 import { NoteInterface } from "../../interfaces/NoteInterface";
 import { UserContext } from "../../contexts/UserProvider";
-import { updateNoteOnServer } from "../../utils/socket";
 
 interface NoteProps {
   note: NoteInterface;
-  handleChangeNote: (newNote: NoteInterface) => void;
+  onChangeAndUpdateNote: (newNote: NoteInterface) => void;
 }
 
-const Note: FC<NoteProps> = ({ note, handleChangeNote }) => {
+const Note: FC<NoteProps> = ({ note, onChangeAndUpdateNote }) => {
   const [textColor] = useState(idealTextColor(note.color));
   const user = useContext(UserContext);
 
@@ -22,8 +21,7 @@ const Note: FC<NoteProps> = ({ note, handleChangeNote }) => {
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const newNote = { ...note, text: event.target.value };
-    handleChangeNote(newNote);
-    updateNoteOnServer(newNote);
+    onChangeAndUpdateNote(newNote);
   };
 
   const changePosition = (note: NoteInterface, data: DraggableData) => {
@@ -32,8 +30,7 @@ const Note: FC<NoteProps> = ({ note, handleChangeNote }) => {
       top: data.y,
       left: data.x,
     };
-    handleChangeNote(newNote);
-    updateNoteOnServer(newNote);
+    onChangeAndUpdateNote(newNote);
   };
 
   const changeable = isChangeable(user?.name, note.user.name);
