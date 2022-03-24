@@ -20,7 +20,6 @@
 .header_button {
   margin: 10px 10px;
   padding: 10px;
-  background-color: rgba(51, 51, 51, 0.05);
   border-radius: 8px;
   border-width: 0;
   color: #333333;
@@ -37,4 +36,12 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+}
+
+.button_sign_up {
+  background-color: #44ee2ea1;
+}
+
+.button_sign_in {
+  background-color: #3333330d;
 }

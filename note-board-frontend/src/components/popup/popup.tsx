@@ -2,7 +2,6 @@ import axios from "axios";
 import { FC, useState } from "react";
 import Modal from "react-modal";
 import { UserInterface } from "../../interfaces/UserInterface";
-import { fetchCreateUser } from "../../utils/api";
 import { setToLocalStorage } from "../../utils/localstorage";
 import classes from "./popup.module.css";
 
@@ -10,12 +9,14 @@ interface PopupProps {
   isModalOpen: boolean;
   changeIsModalOpen: (isModalOpen: boolean) => void;
   changeUser: (user: UserInterface | null) => void;
+  fetchFunction: (userName: string) => Promise<any>;
 }
 
 const Popup: FC<PopupProps> = ({
   isModalOpen,
   changeIsModalOpen,
   changeUser,
+  fetchFunction,
 }) => {
   const [error, setError] = useState("");
 
@@ -32,7 +33,7 @@ const Popup: FC<PopupProps> = ({
     }
 
     try {
-      const data = await fetchCreateUser(username);
+      const data = await fetchFunction(username);
       changeUser(data);
       changeIsModalOpen(false);
       setToLocalStorage(username);
@@ -57,7 +58,7 @@ const Popup: FC<PopupProps> = ({
       className={classes.modal}
       overlayClassName={classes.overlay}
     >
-      <div className={classes.title}>Sign In</div>
+      <div className={classes.title}>Type info</div>
       <div className={classes.form}>
         <form onSubmit={(event) => onSubmit(event)}>
           <div className={classes.input_container}>

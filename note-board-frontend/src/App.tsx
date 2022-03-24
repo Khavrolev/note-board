@@ -3,17 +3,21 @@ import "./App.css";
 import { FC, useCallback, useEffect, useState } from "react";
 import Popup from "./components/popup/popup";
 import { UserInterface } from "./interfaces/UserInterface";
-import { fetchGetUser } from "./utils/api";
+import { fetchCreateUser, fetchGetUser } from "./utils/api";
 import axios from "axios";
 import {
   getFromLocalStorage,
   removeFromLocalStorage,
 } from "./utils/localstorage";
 import { UserContext } from "./contexts/UserProvider";
+import classNames from "classnames";
 
 const App: FC = () => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<UserInterface | null>(null);
+  const [fetchFunction, setFetchFunction] = useState<
+    (userName: string) => Promise<any>
+  >(() => fetchGetUser);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -28,9 +32,19 @@ const App: FC = () => {
     setUser(value);
   }, []);
 
-  const logout = () => {
+  const signOut = () => {
     removeFromLocalStorage();
     setUser(null);
+  };
+
+  const signIn = () => {
+    setIsModalOpen(true);
+    setFetchFunction(() => fetchGetUser);
+  };
+
+  const signUp = () => {
+    setIsModalOpen(true);
+    setFetchFunction(() => fetchCreateUser);
   };
 
   const getUserFromLocalStorage = async () => {
@@ -61,6 +75,7 @@ const App: FC = () => {
           isModalOpen={isModalOpen}
           changeIsModalOpen={changeIsModalOpen}
           changeUser={changeUser}
+          fetchFunction={fetchFunction}
         />
         <div className="header">
           <div className="header_title">
@@ -71,12 +86,22 @@ const App: FC = () => {
               : `loading...`}
           </div>
           {loading ? (
-            <button
-              className="header_button"
-              onClick={() => (user ? logout() : setIsModalOpen(true))}
-            >
-              {user ? "Sign Out" : "Sign In"}
-            </button>
+            <div>
+              <button
+                className={classNames("header_button", "button_sign_in")}
+                onClick={() => (user ? signOut() : signIn())}
+              >
+                {user ? "Sign Out" : "Sign In"}
+              </button>
+              {!user ? (
+                <button
+                  className={classNames("header_button", "button_sign_up")}
+                  onClick={signUp}
+                >
+                  Sign Up
+                </button>
+              ) : null}
+            </div>
           ) : null}
         </div>
         <Board />

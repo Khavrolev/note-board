@@ -10,15 +10,15 @@ import classes from "./board.module.css";
 
 const Board: FC = () => {
   const user = useContext(UserContext);
-  const { notes, changeLocalNotes } = useNotes();
+  const { notes, changeNotes } = useNotes();
 
   const changeText = useCallback(
     (note: NoteInterface, event: React.ChangeEvent<HTMLTextAreaElement>) => {
       const newNote = { ...note, text: event.target.value };
-      changeLocalNotes(newNote);
+      changeNotes(newNote);
       updateNote(newNote);
     },
-    [changeLocalNotes]
+    [changeNotes]
   );
 
   const changePosition = useCallback(
@@ -28,10 +28,10 @@ const Board: FC = () => {
         top: data.y,
         left: data.x,
       };
-      changeLocalNotes(newNote);
+      changeNotes(newNote);
       updateNote(newNote);
     },
-    [changeLocalNotes]
+    [changeNotes]
   );
 
   const onDoubleClick = (
