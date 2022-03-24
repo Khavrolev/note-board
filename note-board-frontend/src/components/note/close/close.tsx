@@ -1,16 +1,13 @@
-import { FC, useContext } from "react";
-import { SocketContext } from "../../../contexts/SocketProvider";
-import { deleteNote } from "../../../utils/socket";
+import { FC } from "react";
+import { deleteNote, socket } from "../../../utils/socket";
 import classes from "./close.module.css";
 
 interface CloseProps {
   textColor: string;
-  _id: number;
+  _id: string;
 }
 
 const Close: FC<CloseProps> = ({ textColor, _id }) => {
-  const socket = useContext(SocketContext);
-
   return (
     <button
       style={{

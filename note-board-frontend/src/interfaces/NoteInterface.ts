@@ -1,7 +1,7 @@
 import { UserInterface } from "./UserInterface";
 
 export interface NoteInterface {
-  _id: number;
+  _id: string;
   user: UserInterface;
   left: number;
   top: number;

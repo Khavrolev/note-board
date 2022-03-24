@@ -1,4 +1,4 @@
 export interface UserInterface {
-  _id: number;
+  _id: string;
   name: string;
 }
