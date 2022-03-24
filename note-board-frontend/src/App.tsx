@@ -22,7 +22,29 @@ const App: FC = () => {
   const [notes, setNotes] = useState<NoteInterface[]>([]);
 
   useEffect(() => {
+    const getUserFromLocalStorage = async () => {
+      const currentValue = getFromLocalStorage();
+
+      if (currentValue) {
+        try {
+          const data = await fetchGetUser(currentValue);
+          setUser(data);
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            console.log(error.response?.data.message);
+          } else {
+            console.log(error);
+          }
+        } finally {
+          setLoading(true);
+        }
+      } else {
+        setLoading(true);
+      }
+    };
+
     getUserFromLocalStorage();
+
     socket.on(SocketMessageToClient.GetAllNotes, setNotes);
     socket.on(SocketMessageToClient.CreateNote, (data) => {
       setNotes((currentNotes) => [...currentNotes, data]);
@@ -49,27 +71,6 @@ const App: FC = () => {
   const logout = () => {
     removeFromLocalStorage();
     setUser(null);
-  };
-
-  const getUserFromLocalStorage = async () => {
-    const currentValue = getFromLocalStorage();
-
-    if (currentValue) {
-      try {
-        const data = await fetchGetUser(currentValue);
-        setUser(data);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          console.log(error.response?.data.message);
-        } else {
-          console.log(error);
-        }
-      } finally {
-        setLoading(true);
-      }
-    } else {
-      setLoading(true);
-    }
   };
 
   return (
