@@ -38,7 +38,7 @@ const Board: FC = () => {
           <Note
             key={note._id}
             note={note}
-            onChangeAndUpdateNote={handleChangeAndUpdateNote}
+            onChangeNote={handleChangeAndUpdateNote}
           />
         ))}
     </div>

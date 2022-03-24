@@ -9,10 +9,10 @@ import { UserContext } from "../../contexts/UserProvider";
 
 interface NoteProps {
   note: NoteInterface;
-  onChangeAndUpdateNote: (newNote: NoteInterface) => void;
+  onChangeNote: (newNote: NoteInterface) => void;
 }
 
-const Note: FC<NoteProps> = ({ note, onChangeAndUpdateNote }) => {
+const Note: FC<NoteProps> = ({ note, onChangeNote }) => {
   const [textColor] = useState(idealTextColor(note.color));
   const user = useContext(UserContext);
 
@@ -21,7 +21,7 @@ const Note: FC<NoteProps> = ({ note, onChangeAndUpdateNote }) => {
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const newNote = { ...note, text: event.target.value };
-    onChangeAndUpdateNote(newNote);
+    onChangeNote(newNote);
   };
 
   const changePosition = (note: NoteInterface, data: DraggableData) => {
@@ -30,7 +30,7 @@ const Note: FC<NoteProps> = ({ note, onChangeAndUpdateNote }) => {
       top: data.y,
       left: data.x,
     };
-    onChangeAndUpdateNote(newNote);
+    onChangeNote(newNote);
   };
 
   const changeable = isChangeable(user?.name, note.user.name);
