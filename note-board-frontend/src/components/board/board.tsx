@@ -1,57 +1,24 @@
-import { FC, useCallback, useContext, useEffect, useState } from "react";
+import { FC, useCallback, useContext } from "react";
 import { DraggableData } from "react-draggable";
 import { UserContext } from "../../contexts/UserProvider";
+import { useNotes } from "../../hooks/useNotes";
 import { NoteInterface } from "../../interfaces/NoteInterface";
 import { getRandomColor } from "../../utils/getColor";
-import {
-  createNote,
-  disconnectSocket,
-  initSocket,
-  socket,
-  SocketMessageToClient,
-  updateNote,
-} from "../../utils/socket";
+import { createNote, updateNote } from "../../utils/socket";
 import Note from "../note/note";
 import classes from "./board.module.css";
 
 const Board: FC = () => {
   const user = useContext(UserContext);
-  const [notes, setNotes] = useState<NoteInterface[]>([]);
-
-  useEffect(() => {
-    initSocket();
-
-    socket.on(SocketMessageToClient.GetAllNotes, setNotes);
-    socket.on(SocketMessageToClient.CreateNote, (data) => {
-      setNotes((currentNotes) => [...currentNotes, data]);
-    });
-    socket.on(SocketMessageToClient.DeleteNote, (data) => {
-      setNotes((currentNotes) =>
-        currentNotes.filter((note) => note._id !== data._id)
-      );
-    });
-    socket.on(SocketMessageToClient.UpdateNote, (data) => {
-      changeLocalNotes(data);
-    });
-
-    return () => {
-      disconnectSocket();
-    };
-  }, []);
-
-  const changeLocalNotes = (newNote: NoteInterface) => {
-    setNotes((currentNotes) =>
-      currentNotes.map((note) => (note._id === newNote._id ? newNote : note))
-    );
-  };
+  const { notes, changeLocalNotes } = useNotes();
 
   const changeText = useCallback(
     (note: NoteInterface, event: React.ChangeEvent<HTMLTextAreaElement>) => {
       const newNote = { ...note, text: event.target.value };
       changeLocalNotes(newNote);
-      updateNote(socket, newNote);
+      updateNote(newNote);
     },
-    []
+    [changeLocalNotes]
   );
 
   const changePosition = useCallback(
@@ -62,9 +29,9 @@ const Board: FC = () => {
         left: data.x,
       };
       changeLocalNotes(newNote);
-      updateNote(socket, newNote);
+      updateNote(newNote);
     },
-    []
+    [changeLocalNotes]
   );
 
   const onDoubleClick = (
@@ -74,7 +41,7 @@ const Board: FC = () => {
       if (event.target !== event.currentTarget) {
         return;
       }
-      createNote(socket, {
+      createNote({
         text: "",
         userName: user?.name,
         color: getRandomColor(),
@@ -85,10 +52,7 @@ const Board: FC = () => {
   };
 
   return (
-    <div
-      onDoubleClick={(event) => onDoubleClick(event)}
-      className={classes.board}
-    >
+    <div onDoubleClick={onDoubleClick} className={classes.board}>
       {user &&
         notes?.map((note) => (
           <Note

@@ -36,7 +36,6 @@ interface ClientToServerEvents {
 }
 
 export let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
-// export let socket: any;
 
 export const initSocket = () => {
   socket = io(
@@ -48,14 +47,14 @@ export const disconnectSocket = () => {
   socket.disconnect();
 };
 
-export const createNote = (socket: Socket, note: CreateNote) => {
+export const createNote = (note: CreateNote) => {
   socket.emit(SocketMessageToServer.CreateNote, note);
 };
 
-export const updateNote = (socket: Socket, note: NoteInterface) => {
+export const updateNote = (note: NoteInterface) => {
   socket.emit(SocketMessageToServer.UpdateNote, note);
 };
 
-export const deleteNote = (socket: Socket, id: string) => {
+export const deleteNote = (id: string) => {
   socket.emit(SocketMessageToServer.DeleteNote, id);
 };

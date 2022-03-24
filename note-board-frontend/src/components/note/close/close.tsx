@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { deleteNote, socket } from "../../../utils/socket";
+import { deleteNote } from "../../../utils/socket";
 import classes from "./close.module.css";
 
 interface CloseProps {
@@ -14,7 +14,7 @@ const Close: FC<CloseProps> = ({ textColor, _id }) => {
         color: textColor,
       }}
       className={classes.note_delete}
-      onClick={() => deleteNote(socket, _id)}
+      onClick={() => deleteNote(_id)}
     >
       <svg style={{ width: "24px", height: "24px" }} viewBox="0 0 24 24">
         <path
