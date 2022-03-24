@@ -6,19 +6,35 @@ import classes from "./note.module.css";
 import Close from "./close/close";
 import { NoteInterface } from "../../interfaces/NoteInterface";
 import { UserContext } from "../../contexts/UserProvider";
+import { updateNoteOnServer } from "../../utils/socket";
 
 interface NoteProps {
   note: NoteInterface;
-  changePosition: (note: NoteInterface, data: DraggableData) => void;
-  changeText: (
-    note: NoteInterface,
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => void;
+  handleChangeNote: (newNote: NoteInterface) => void;
 }
 
-const Note: FC<NoteProps> = ({ note, changeText, changePosition }) => {
+const Note: FC<NoteProps> = ({ note, handleChangeNote }) => {
   const [textColor] = useState(idealTextColor(note.color));
   const user = useContext(UserContext);
+
+  const changeText = (
+    note: NoteInterface,
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const newNote = { ...note, text: event.target.value };
+    handleChangeNote(newNote);
+    updateNoteOnServer(newNote);
+  };
+
+  const changePosition = (note: NoteInterface, data: DraggableData) => {
+    const newNote = {
+      ...note,
+      top: data.y,
+      left: data.x,
+    };
+    handleChangeNote(newNote);
+    updateNoteOnServer(newNote);
+  };
 
   const changeable = isChangeable(user?.name, note.user.name);
 
@@ -49,7 +65,7 @@ const Note: FC<NoteProps> = ({ note, changeText, changePosition }) => {
           })}
         >
           <div className={classes.username}>{note?.user.name}</div>
-          {changeable ? <Close textColor={textColor} _id={note._id} /> : null}
+          {changeable && <Close textColor={textColor} _id={note._id} />}
         </div>
         <div className={classes.text}>
           <textarea

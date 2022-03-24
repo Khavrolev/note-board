@@ -22,10 +22,6 @@ const App: FC = () => {
     getUserFromLocalStorage();
   }, []);
 
-  const handleIsModalOpenChange = useCallback((value) => {
-    setIsModalOpen(value);
-  }, []);
-
   const handleUserChange = useCallback((value) => {
     setUser(value);
   }, []);
@@ -85,7 +81,7 @@ const App: FC = () => {
         <Popup
           isModalOpen={isModalOpen}
           type={popupType}
-          onIsModalOpenChange={handleIsModalOpenChange}
+          onIsModalOpenChange={setIsModalOpen}
           onUserChange={handleUserChange}
         />
         <div className={classes.header}>

@@ -28,9 +28,7 @@ export const useNotes = () => {
         currentNotes.filter((note) => note._id !== data._id)
       );
     });
-    socket.on(SocketMessageToClient.UpdateNote, (data) =>
-      handleChangeNote(data)
-    );
+    socket.on(SocketMessageToClient.UpdateNote, handleChangeNote);
 
     return () => {
       disconnectSocket();

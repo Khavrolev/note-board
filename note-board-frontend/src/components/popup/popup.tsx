@@ -27,15 +27,14 @@ const Popup: FC<PopupProps> = ({
   const [error, setError] = useState("");
 
   const getFetchFunction = () => {
-    if (type === SignPopup.Up) {
-      return fetchCreateUser;
-    } else if (type === SignPopup.In) {
-      return fetchGetUser;
+    switch (type) {
+      case SignPopup.Up:
+        return fetchCreateUser;
+      case SignPopup.In:
+        return fetchGetUser;
+      default:
+        throw new Error("Wrong popup type");
     }
-
-    return () => {
-      throw new Error("Wrong popup type");
-    };
   };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
