@@ -7,17 +7,17 @@ import { SocketContext } from "../../contexts/SocketProvider";
 import { SocketMessageToClient, updateNote } from "../../utils/socket";
 import Close from "./close/close";
 import { NoteInterface } from "../../interfaces/NoteInterface";
-import { UserInterface } from "../../interfaces/UserInterface";
+import { UserContext } from "../../contexts/UserProvider";
 
 interface NoteProps {
   note: NoteInterface;
-  user: UserInterface;
 }
 
-const Note: FC<NoteProps> = ({ note, user }) => {
+const Note: FC<NoteProps> = ({ note }) => {
   const [textColor, setTextColor] = useState("");
   const [currentNote, setCurrentNote] = useState(note);
   const socket = useContext(SocketContext);
+  const user = useContext(UserContext);
 
   useEffect(() => {
     const updateInfoFromSocket = (data: any) => {
@@ -35,7 +35,7 @@ const Note: FC<NoteProps> = ({ note, user }) => {
     };
   }, [currentNote, note, socket]);
 
-  const changeable = isChangeable(user.name, note.user.name);
+  const changeable = isChangeable(user?.name, note.user.name);
 
   const changeText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newNote = { ...currentNote, text: event.target.value };
@@ -99,7 +99,7 @@ const Note: FC<NoteProps> = ({ note, user }) => {
   );
 };
 
-const isChangeable = (userName: string, notesUserName: string) =>
+const isChangeable = (userName: string | undefined, notesUserName: string) =>
   userName === notesUserName;
 
 export default Note;

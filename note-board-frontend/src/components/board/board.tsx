@@ -1,18 +1,15 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../contexts/SocketProvider";
+import { UserContext } from "../../contexts/UserProvider";
 import { NoteInterface } from "../../interfaces/NoteInterface";
-import { UserInterface } from "../../interfaces/UserInterface";
 import { getRandomColor } from "../../utils/getColor";
 import { createNote, SocketMessageToClient } from "../../utils/socket";
 import Note from "../note/note";
 import classes from "./board.module.css";
 
-interface BoardProps {
-  user: UserInterface | null;
-}
-
-const Board: FC<BoardProps> = ({ user }) => {
+const Board: FC = () => {
   const socket = useContext(SocketContext);
+  const user = useContext(UserContext);
   const [notes, setNotes] = useState<NoteInterface[]>([]);
 
   useEffect(() => {
@@ -48,8 +45,7 @@ const Board: FC<BoardProps> = ({ user }) => {
 
   return (
     <div onClick={(event) => onClick(event)} className={classes.board}>
-      {user &&
-        notes?.map((note) => <Note key={note._id} note={note} user={user} />)}
+      {user && notes?.map((note) => <Note key={note._id} note={note} />)}
     </div>
   );
 };

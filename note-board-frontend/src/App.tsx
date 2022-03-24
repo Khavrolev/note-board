@@ -10,6 +10,7 @@ import {
   getFromLocalStorage,
   removeFromLocalStorage,
 } from "./utils/localstorage";
+import { UserContext } from "./contexts/UserProvider";
 
 const App: FC = () => {
   const [loading, setLoading] = useState(false);
@@ -55,33 +56,35 @@ const App: FC = () => {
   };
 
   return (
-    <SocketContext.Provider value={socket}>
-      <div className="container">
-        <Popup
-          isModalOpen={isModalOpen}
-          changeIsModalOpen={changeIsModalOpen}
-          changeUser={changeUser}
-        />
-        <div className="header">
-          <div className="header_title">
-            {user
-              ? `Hello, ${user.name}! We're happy to see you`
-              : loading
-              ? `Hello, friend! Please, sign in`
-              : `loading...`}
+    <UserContext.Provider value={user}>
+      <SocketContext.Provider value={socket}>
+        <div className="container">
+          <Popup
+            isModalOpen={isModalOpen}
+            changeIsModalOpen={changeIsModalOpen}
+            changeUser={changeUser}
+          />
+          <div className="header">
+            <div className="header_title">
+              {user
+                ? `Hello, ${user.name}! We're happy to see you`
+                : loading
+                ? `Hello, friend! Please, sign in`
+                : `loading...`}
+            </div>
+            {loading ? (
+              <button
+                className="header_button"
+                onClick={() => (user ? logout() : setIsModalOpen(true))}
+              >
+                {user ? "Sign Out" : "Sign In"}
+              </button>
+            ) : null}
           </div>
-          {loading ? (
-            <button
-              className="header_button"
-              onClick={() => (user ? logout() : setIsModalOpen(true))}
-            >
-              {user ? "Sign Out" : "Sign In"}
-            </button>
-          ) : null}
+          <Board />
         </div>
-        <Board user={user} />
-      </div>
-    </SocketContext.Provider>
+      </SocketContext.Provider>
+    </UserContext.Provider>
   );
 };
 
