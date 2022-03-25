@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserProvider";
 import { NoteInterface } from "../interfaces/NoteInterface";
 import { getRandomColor } from "../utils/getColor";
@@ -18,20 +18,19 @@ export const useNotes = () => {
   const [isDragging, setIsDragging] = useState(false); //prevent creation new Note, when Note is dragging
   const user = useContext(UserContext);
 
-  const handleChangeNote = (newNote: NoteInterface) => {
+  const handleChangeNote = useCallback((newNote: NoteInterface) => {
     setNotes((currentNotes: NoteInterface[]) =>
       currentNotes.map((note) => (note._id === newNote._id ? newNote : note)),
     );
-  };
+  }, []);
 
-  const handleChangeAndUpdateNote = (newNote: NoteInterface) => {
-    handleChangeNote(newNote);
-    updateNoteOnServer(newNote);
-  };
-
-  const handleIsDragging = (value: boolean) => {
-    setIsDragging(value);
-  };
+  const handleChangeAndUpdateNote = useCallback(
+    (newNote: NoteInterface) => {
+      handleChangeNote(newNote);
+      updateNoteOnServer(newNote);
+    },
+    [handleChangeNote],
+  );
 
   const handleCreateNewNote = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -65,12 +64,12 @@ export const useNotes = () => {
     return () => {
       disconnectSocket();
     };
-  }, []);
+  }, [handleChangeNote]);
 
   return {
     notes,
     handleChangeNote: handleChangeAndUpdateNote,
     handleCreateNewNote,
-    handleIsDragging,
+    handleIsDragging: setIsDragging,
   };
 };
