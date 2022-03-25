@@ -19,7 +19,7 @@ export class NotesService {
   }
 
   async createNote(dto: CreateNoteDto) {
-    const user = await this.usersService.getOneByName(dto.userName);
+    const user = await this.usersService.getOneById(dto.userId);
 
     const newNote = new this.notesModel({ ...dto, user });
 

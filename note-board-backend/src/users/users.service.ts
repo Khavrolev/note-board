@@ -18,7 +18,15 @@ export class UsersService {
   async getOneByName(name: string) {
     const user = await this.usersModel.findOne({ name }).exec();
 
-    this.checkUser(user, name);
+    this.checkUser(user, name, true);
+
+    return user;
+  }
+
+  async getOneById(_id: string) {
+    const user = await this.usersModel.findOne({ _id }).exec();
+
+    this.checkUser(user, _id, false);
 
     return user;
   }
@@ -32,9 +40,11 @@ export class UsersService {
     return newUser.save();
   }
 
-  private checkUser(user: User, name: string) {
+  private checkUser(user: User, value: string, isName: boolean) {
     if (!user) {
-      throw new NotFoundException(`No User with name = '${name}'`);
+      throw new NotFoundException(
+        `No User with ${isName ? 'name' : 'id'} = '${value}'`,
+      );
     }
   }
 
