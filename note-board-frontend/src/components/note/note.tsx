@@ -28,8 +28,8 @@ const Note: FC<NoteProps> = ({ note, onChangeNote, onIsDragging }) => {
   const changePosition = (note: NoteInterface, data: DraggableData) => {
     const newNote = {
       ...note,
-      top: data.y,
-      left: data.x,
+      top: data.y > 0 ? data.y : 0,
+      left: data.x > 0 ? data.x : 0,
     };
     onChangeNote(newNote);
     setTimeout(() => {
