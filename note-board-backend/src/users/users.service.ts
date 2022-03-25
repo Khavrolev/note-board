@@ -40,10 +40,10 @@ export class UsersService {
     return newUser.save();
   }
 
-  private checkUser(user: User, value: string, isName: boolean) {
+  private checkUser(user: User, value: string, checkByName: boolean) {
     if (!user) {
       throw new NotFoundException(
-        `No User with ${isName ? 'name' : 'id'} = '${value}'`,
+        `No User with ${checkByName ? 'name' : 'id'} = '${value}'`,
       );
     }
   }
