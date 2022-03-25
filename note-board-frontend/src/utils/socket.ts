@@ -15,7 +15,7 @@ enum SocketMessageToServer {
 }
 
 interface CreateNote {
-  userName: string;
+  userId: string;
   left: number;
   top: number;
   color: string;

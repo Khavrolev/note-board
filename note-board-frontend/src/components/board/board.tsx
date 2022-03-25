@@ -19,7 +19,7 @@ const Board: FC = () => {
     }
     createNoteOnServer({
       text: "",
-      userName: user?.name,
+      userId: user?._id,
       color: getRandomColor(),
       top: event.nativeEvent.offsetY,
       left: event.nativeEvent.offsetX,
