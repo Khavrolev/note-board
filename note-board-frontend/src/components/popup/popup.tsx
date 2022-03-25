@@ -51,6 +51,7 @@ const Popup: FC<PopupProps> = ({
       const data = await fetchFunction(username);
       onUserChange(data);
       onIsModalOpenChange(false);
+      setError("");
       setToLocalStorage(username);
     } catch (error) {
       if (axios.isAxiosError(error)) {
