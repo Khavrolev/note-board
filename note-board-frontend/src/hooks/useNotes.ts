@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../contexts/UserProvider";
 import { NoteInterface } from "../interfaces/NoteInterface";
+import { getRandomColor } from "../utils/getColor";
 import {
+  createNoteOnServer,
   disconnectSocket,
   initSocket,
   onCreateNoteFromServer,
@@ -12,6 +15,7 @@ import {
 
 export const useNotes = () => {
   const [notes, setNotes] = useState<NoteInterface[]>([]);
+  const user = useContext(UserContext);
 
   const handleChangeNote = (newNote: NoteInterface) => {
     setNotes((currentNotes: NoteInterface[]) =>
@@ -22,6 +26,21 @@ export const useNotes = () => {
   const handleChangeAndUpdateNote = (newNote: NoteInterface) => {
     handleChangeNote(newNote);
     updateNoteOnServer(newNote);
+  };
+
+  const handleCreateNewNote = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (!user || event.target !== event.currentTarget) {
+      return;
+    }
+    createNoteOnServer({
+      text: "",
+      userId: user?._id,
+      color: getRandomColor(),
+      top: event.nativeEvent.offsetY,
+      left: event.nativeEvent.offsetX,
+    });
   };
 
   useEffect(() => {
@@ -43,5 +62,9 @@ export const useNotes = () => {
     };
   }, []);
 
-  return { notes, handleChangeNote: handleChangeAndUpdateNote };
+  return {
+    notes,
+    handleChangeNote: handleChangeAndUpdateNote,
+    handleCreateNewNote,
+  };
 };
