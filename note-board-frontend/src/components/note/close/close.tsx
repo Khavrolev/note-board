@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { deleteNoteOnServer } from "../../../utils/socket";
-import classes from "./close.module.css";
+import classes from "../note.module.css";
 
 interface CloseProps {
   textColor: string;

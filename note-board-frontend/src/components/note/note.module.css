@@ -46,3 +46,10 @@ textarea {
 .text {
   padding: 10px;
 }
+
+.note_delete {
+  margin-left: auto;
+  padding: 0px 2px;
+  cursor: pointer;
+  background-color: transparent;
+}
