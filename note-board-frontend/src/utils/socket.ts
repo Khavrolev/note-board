@@ -1,7 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import { NoteInterface } from "../interfaces/NoteInterface";
 
-export enum SocketMessageToClient {
+enum SocketMessageToClient {
   GetAllNotes = "all-notes-to-client",
   CreateNote = "create-note-to-client",
   UpdateNote = "update-note-to-client",
@@ -57,4 +57,28 @@ export const updateNoteOnServer = (note: NoteInterface) => {
 
 export const deleteNoteOnServer = (id: string) => {
   socket.emit(SocketMessageToServer.DeleteNote, id);
+};
+
+export const onGetAllNotesFromServer = (
+  onSuccess: (notes: NoteInterface[]) => void
+) => {
+  socket.on(SocketMessageToClient.GetAllNotes, onSuccess);
+};
+
+export const onCreateNoteFromServer = (
+  onSuccess: (note: NoteInterface) => void
+) => {
+  socket.on(SocketMessageToClient.CreateNote, onSuccess);
+};
+
+export const onDeleteNoteFromServer = (
+  onSuccess: (note: NoteInterface) => void
+) => {
+  socket.on(SocketMessageToClient.DeleteNote, onSuccess);
+};
+
+export const onUpdateNoteFromServer = (
+  onSuccess: (note: NoteInterface) => void
+) => {
+  socket.on(SocketMessageToClient.UpdateNote, onSuccess);
 };

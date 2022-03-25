@@ -3,8 +3,10 @@ import { NoteInterface } from "../interfaces/NoteInterface";
 import {
   disconnectSocket,
   initSocket,
-  socket,
-  SocketMessageToClient,
+  onCreateNoteFromServer,
+  onDeleteNoteFromServer,
+  onGetAllNotesFromServer,
+  onUpdateNoteFromServer,
 } from "../utils/socket";
 
 export const useNotes = () => {
@@ -19,16 +21,16 @@ export const useNotes = () => {
   useEffect(() => {
     initSocket();
 
-    socket.on(SocketMessageToClient.GetAllNotes, setNotes);
-    socket.on(SocketMessageToClient.CreateNote, (data) => {
+    onGetAllNotesFromServer(setNotes);
+    onCreateNoteFromServer((data) => {
       setNotes((currentNotes) => [...currentNotes, data]);
     });
-    socket.on(SocketMessageToClient.DeleteNote, (data) => {
+    onDeleteNoteFromServer((data) => {
       setNotes((currentNotes) =>
         currentNotes.filter((note) => note._id !== data._id)
       );
     });
-    socket.on(SocketMessageToClient.UpdateNote, handleChangeNote);
+    onUpdateNoteFromServer(handleChangeNote);
 
     return () => {
       disconnectSocket();
