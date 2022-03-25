@@ -15,6 +15,7 @@ import {
 
 export const useNotes = () => {
   const [notes, setNotes] = useState<NoteInterface[]>([]);
+  const [isDragging, setIsDragging] = useState(false); //prevent creation new Note, when Note is dragging
   const user = useContext(UserContext);
 
   const handleChangeNote = (newNote: NoteInterface) => {
@@ -28,10 +29,14 @@ export const useNotes = () => {
     updateNoteOnServer(newNote);
   };
 
+  const handleIsDragging = (value: boolean) => {
+    setIsDragging(value);
+  };
+
   const handleCreateNewNote = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
-    if (!user || event.target !== event.currentTarget) {
+    if (!user || event.target !== event.currentTarget || isDragging) {
       return;
     }
     createNoteOnServer({
@@ -66,5 +71,6 @@ export const useNotes = () => {
     notes,
     handleChangeNote: handleChangeAndUpdateNote,
     handleCreateNewNote,
+    handleIsDragging,
   };
 };

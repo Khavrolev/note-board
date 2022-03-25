@@ -10,9 +10,10 @@ import { UserContext } from "../../contexts/UserProvider";
 interface NoteProps {
   note: NoteInterface;
   onChangeNote: (newNote: NoteInterface) => void;
+  onIsDragging: (isDragging: boolean) => void;
 }
 
-const Note: FC<NoteProps> = ({ note, onChangeNote }) => {
+const Note: FC<NoteProps> = ({ note, onChangeNote, onIsDragging }) => {
   const [textColor] = useState(idealTextColor(note.color));
   const user = useContext(UserContext);
 
@@ -31,17 +32,23 @@ const Note: FC<NoteProps> = ({ note, onChangeNote }) => {
       left: data.x,
     };
     onChangeNote(newNote);
+    setTimeout(() => {
+      onIsDragging(false);
+    }, 100);
+  };
+
+  const handleOnStartDragging = () => {
+    if (!changeable) {
+      return false;
+    }
+    onIsDragging(true);
   };
 
   const changeable = isChangeable(user?.name, note.user.name);
 
   return (
     <Draggable
-      onStart={() => {
-        if (!changeable) {
-          return false;
-        }
-      }}
+      onStart={handleOnStartDragging}
       onStop={(event, data) => changePosition(note, data)}
       position={{ x: note.left, y: note.top }}
       handle={`.${classes.header}`}
