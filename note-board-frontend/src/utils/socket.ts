@@ -1,5 +1,8 @@
 import { io, Socket } from "socket.io-client";
 import { NoteInterface } from "../interfaces/NoteInterface";
+import debounce from "lodash.debounce";
+
+const DEBOUNCE_TIMEOUT = 300;
 
 enum SocketMessageToClient {
   GetAllNotes = "all-notes-to-client",
@@ -51,9 +54,9 @@ export const createNoteOnServer = (note: CreateNote) => {
   socket.emit(SocketMessageToServer.CreateNote, note);
 };
 
-export const updateNoteOnServer = (note: NoteInterface) => {
+export const updateNoteOnServer = debounce((note: NoteInterface) => {
   socket.emit(SocketMessageToServer.UpdateNote, note);
-};
+}, DEBOUNCE_TIMEOUT);
 
 export const deleteNoteOnServer = (id: string) => {
   socket.emit(SocketMessageToServer.DeleteNote, id);
