@@ -87,7 +87,7 @@ const App: FC = () => {
               <button
                 className={classNames(
                   classes.header_button,
-                  classes.button_sign_in
+                  classes.button_sign_in,
                 )}
                 onClick={() => (user ? signOut() : signIn())}
               >
@@ -97,7 +97,7 @@ const App: FC = () => {
                 <button
                   className={classNames(
                     classes.header_button,
-                    classes.button_sign_up
+                    classes.button_sign_up,
                   )}
                   onClick={signUp}
                 >

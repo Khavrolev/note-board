@@ -20,7 +20,7 @@ export const useNotes = () => {
 
   const handleChangeNote = (newNote: NoteInterface) => {
     setNotes((currentNotes: NoteInterface[]) =>
-      currentNotes.map((note) => (note._id === newNote._id ? newNote : note))
+      currentNotes.map((note) => (note._id === newNote._id ? newNote : note)),
     );
   };
 
@@ -34,7 +34,7 @@ export const useNotes = () => {
   };
 
   const handleCreateNewNote = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     if (!user || event.target !== event.currentTarget || isDragging) {
       return;
@@ -57,7 +57,7 @@ export const useNotes = () => {
     });
     onDeleteNoteFromServer((data) => {
       setNotes((currentNotes) =>
-        currentNotes.filter((note) => note._id !== data._id)
+        currentNotes.filter((note) => note._id !== data._id),
       );
     });
     onUpdateNoteFromServer(handleChangeNote);

@@ -39,7 +39,7 @@ export let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 
 export const initSocket = () => {
   socket = io(
-    `${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}`
+    `${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}`,
   );
 };
 
@@ -60,25 +60,25 @@ export const deleteNoteOnServer = (id: string) => {
 };
 
 export const onGetAllNotesFromServer = (
-  onSuccess: (notes: NoteInterface[]) => void
+  onSuccess: (notes: NoteInterface[]) => void,
 ) => {
   socket.on(SocketMessageToClient.GetAllNotes, onSuccess);
 };
 
 export const onCreateNoteFromServer = (
-  onSuccess: (note: NoteInterface) => void
+  onSuccess: (note: NoteInterface) => void,
 ) => {
   socket.on(SocketMessageToClient.CreateNote, onSuccess);
 };
 
 export const onDeleteNoteFromServer = (
-  onSuccess: (note: NoteInterface) => void
+  onSuccess: (note: NoteInterface) => void,
 ) => {
   socket.on(SocketMessageToClient.DeleteNote, onSuccess);
 };
 
 export const onUpdateNoteFromServer = (
-  onSuccess: (note: NoteInterface) => void
+  onSuccess: (note: NoteInterface) => void,
 ) => {
   socket.on(SocketMessageToClient.UpdateNote, onSuccess);
 };

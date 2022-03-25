@@ -19,7 +19,7 @@ const Note: FC<NoteProps> = ({ note, onChangeNote, onIsDragging }) => {
 
   const changeText = (
     note: NoteInterface,
-    event: React.ChangeEvent<HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const newNote = { ...note, text: event.target.value };
     onChangeNote(newNote);
