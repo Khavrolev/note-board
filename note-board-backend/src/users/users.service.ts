@@ -32,7 +32,9 @@ export class UsersService {
   }
 
   async createUser(dto: CreateUserDto) {
-    const user = await this.usersModel.findOne({ name: dto.name }).exec();
+    const { name } = dto;
+
+    const user = await this.usersModel.findOne({ name }).exec();
 
     this.checkNoUser(user);
 

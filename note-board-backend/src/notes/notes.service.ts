@@ -33,7 +33,7 @@ export class NotesService {
       .findOneAndUpdate({ _id }, { text, top, left }, { returnOriginal: false })
       .populate('user');
 
-    this.checkNote(updatedNote, dto._id);
+    this.checkNote(updatedNote, _id);
 
     return updatedNote;
   }
