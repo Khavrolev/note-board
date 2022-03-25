@@ -1,9 +1,8 @@
-import { FC, useCallback, useContext } from "react";
+import { FC, useContext } from "react";
 import { UserContext } from "../../contexts/UserProvider";
 import { useNotes } from "../../hooks/useNotes";
-import { NoteInterface } from "../../interfaces/NoteInterface";
 import { getRandomColor } from "../../utils/getColor";
-import { createNoteOnServer, updateNoteOnServer } from "../../utils/socket";
+import { createNoteOnServer } from "../../utils/socket";
 import Note from "../note/note";
 import classes from "./board.module.css";
 
@@ -26,23 +25,11 @@ const Board: FC = () => {
     });
   };
 
-  const handleChangeAndUpdateNote = useCallback(
-    (newNote: NoteInterface) => {
-      handleChangeNote(newNote);
-      updateNoteOnServer(newNote);
-    },
-    [handleChangeNote]
-  );
-
   return (
     <div onDoubleClick={handleCreateNewNote} className={classes.board}>
       {user &&
         notes?.map((note) => (
-          <Note
-            key={note._id}
-            note={note}
-            onChangeNote={handleChangeAndUpdateNote}
-          />
+          <Note key={note._id} note={note} onChangeNote={handleChangeNote} />
         ))}
     </div>
   );

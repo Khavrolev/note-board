@@ -7,6 +7,7 @@ import {
   onDeleteNoteFromServer,
   onGetAllNotesFromServer,
   onUpdateNoteFromServer,
+  updateNoteOnServer,
 } from "../utils/socket";
 
 export const useNotes = () => {
@@ -16,6 +17,11 @@ export const useNotes = () => {
     setNotes((currentNotes: NoteInterface[]) =>
       currentNotes.map((note) => (note._id === newNote._id ? newNote : note))
     );
+  };
+
+  const handleChangeAndUpdateNote = (newNote: NoteInterface) => {
+    handleChangeNote(newNote);
+    updateNoteOnServer(newNote);
   };
 
   useEffect(() => {
@@ -37,5 +43,5 @@ export const useNotes = () => {
     };
   }, []);
 
-  return { notes, handleChangeNote };
+  return { notes, handleChangeNote: handleChangeAndUpdateNote };
 };
