@@ -1,4 +1,4 @@
-textarea {
+.textarea {
   background-color: transparent;
   border: none;
   overflow: auto;
@@ -20,7 +20,7 @@ textarea {
   box-shadow: inset 0 -40px 40px rgba(0, 0, 0, 0.2),
     inset 0 25px 10px rgba(0, 0, 0, 0.2), 0 5px 6px 5px rgba(0, 0, 0, 0.2);
   border: 1px #000000 solid;
-  border-radius: 0 0 0 45px;
+  border-radius: 0 0 0 35px;
   line-height: 1.7em;
 }
 
@@ -45,6 +45,7 @@ textarea {
 
 .text {
   padding: 10px;
+  height: 100%;
 }
 
 .note_delete {

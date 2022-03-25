@@ -77,6 +77,7 @@ const Note: FC<NoteProps> = React.memo(
               style={{
                 color: textColor,
               }}
+              className={classes.textarea}
               value={note?.text}
               readOnly={!changeable}
               onChange={(event) => changeText(note, event)}
